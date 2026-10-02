@@ -1,68 +1,60 @@
 <!doctype html>
-<html lang="ja">
-<head>
+<html lang="ja"><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>BOAT RACER v13</title>
+<title>BOAT RACER v14</title>
 <style>
-*{box-sizing:border-box;-webkit-user-select:none;user-select:none;touch-action:none}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071b29;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
+*{box-sizing:border-box;user-select:none;-webkit-user-select:none;touch-action:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#061722;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",sans-serif}
 canvas{position:fixed;inset:0;width:100%;height:100%}
-#start{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:linear-gradient(#46bee6,#08799f);color:#fff;text-align:center}
-.card{width:min(90vw,560px);padding:24px 28px;border-radius:22px;background:rgba(3,34,52,.92);box-shadow:0 14px 36px rgba(0,0,0,.28)}
-.card h1{margin:0 0 8px;font-size:clamp(34px,6vw,58px)}
-.card h2{margin:0 0 10px;font-size:clamp(23px,3vw,32px)}
-.card p{margin:0 0 18px;line-height:1.55}
-button{border:0;border-radius:13px;font-weight:900}
-#startBtn{padding:15px 28px;font-size:21px;background:#fff;color:#075b79}
-#ui{display:none;position:fixed;inset:0;color:#fff;text-shadow:0 2px 4px rgba(0,20,35,.9);pointer-events:none}
-#version{position:absolute;top:8px;left:50%;transform:translateX(-50%);padding:7px 14px;border-radius:10px;background:rgba(3,34,52,.86);font-weight:900;white-space:nowrap}
-#direction{position:absolute;top:48px;left:50%;transform:translateX(-50%);padding:5px 9px;border-radius:8px;background:rgba(3,34,52,.58);font-size:12px;white-space:nowrap}
-#speed{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);padding:5px 10px;border-radius:10px;background:rgba(3,34,52,.62);font-size:clamp(22px,4vw,40px);font-weight:900}
-#steerState{position:absolute;left:50%;bottom:58px;transform:translateX(-50%);padding:4px 9px;border-radius:8px;background:rgba(3,34,52,.55);font-size:12px;font-weight:900}
-#reset{position:absolute;top:9px;right:12px;padding:9px 12px;background:rgba(255,255,255,.94);color:#064b65;pointer-events:auto}
-#throttle{position:absolute;left:10px;top:23%;width:118px;height:57%;pointer-events:auto}
-#tLabel{position:absolute;top:-30px;left:50%;transform:translateX(-50%);font-weight:900}
-#tTrack{position:absolute;left:50%;top:0;bottom:0;width:24px;transform:translateX(-50%);border:2px solid #fff;border-radius:14px;background:rgba(1,27,42,.58)}
-#tKnob{position:absolute;left:50%;bottom:0;width:72px;height:44px;transform:translate(-50%,50%);border:4px solid #555;border-radius:10px;background:#f1f1f1;box-shadow:0 4px 10px rgba(0,0,0,.25)}
-#steer{position:absolute;right:10px;bottom:18px;width:min(38vw,340px);height:140px;pointer-events:auto}
-#sLabel{position:absolute;top:5px;left:50%;transform:translateX(-50%);font-weight:900;white-space:nowrap}
-#sTrack{position:absolute;left:0;right:0;top:78px;height:24px;border:2px solid #fff;border-radius:14px;background:rgba(1,27,42,.58)}
-#sKnob{position:absolute;left:50%;top:90px;width:68px;height:68px;transform:translate(-50%,-50%);border:6px solid #555;border-radius:50%;background:#f1f1f1;box-shadow:0 4px 10px rgba(0,0,0,.25)}
-#portrait{display:none;position:fixed;z-index:100;inset:0;align-items:center;justify-content:center;padding:30px;background:#071b29;color:#fff;text-align:center;font-size:22px}
-@media(orientation:portrait){#portrait{display:flex}}
-</style>
-</head>
-<body>
+#start{position:fixed;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;background:linear-gradient(#68d3f0,#087da8);color:#fff;text-align:center}
+.card{width:min(88vw,520px);padding:24px;border-radius:22px;background:rgba(3,28,43,.92);box-shadow:0 16px 40px #0005}.card h1{margin:0 0 6px;font-size:44px}.card h2{margin:0 0 12px}.card p{line-height:1.55}.card button{padding:14px 28px;border:0;border-radius:12px;font-size:20px;font-weight:900;color:#075f7d;background:#fff}
+#ui{display:none;position:fixed;inset:0;color:#fff;pointer-events:none;text-shadow:0 2px 5px #001a27}
+#top{position:absolute;top:8px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.badge{padding:6px 10px;border-radius:9px;background:#052337a8;border:1px solid #ffffff2c;font-size:12px;font-weight:900;white-space:nowrap}
+#reset{position:absolute;right:9px;top:8px;border:0;border-radius:10px;padding:9px 11px;font-weight:900;color:#064a62;background:#fffffff0;pointer-events:auto}
+#speedbox{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);min-width:155px;padding:7px 14px;text-align:center;border-radius:14px;background:#031c2bd9;border:1px solid #ffffff2b}
+#speed{font-size:36px;font-weight:950;line-height:1}#speed small{font-size:15px;margin-left:5px}#state{font-size:11px;margin-top:5px;font-weight:900}
+#throttle{position:absolute;left:8px;top:22%;width:108px;height:56%;pointer-events:auto}#tlab{position:absolute;top:-26px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:900}#ttrack{position:absolute;left:50%;top:0;bottom:0;width:18px;transform:translateX(-50%);border:2px solid #fff;border-radius:12px;background:#06213399}#tfill{position:absolute;left:50%;bottom:0;width:8px;height:0;transform:translateX(-50%);border-radius:8px;background:#7ce6f8;box-shadow:0 0 12px #7ce6f8}#tknob{position:absolute;left:50%;bottom:0;width:66px;height:38px;transform:translate(-50%,50%);border:4px solid #37434a;border-radius:9px;background:#eee}
+#steer{position:absolute;right:8px;bottom:14px;width:min(38vw,350px);height:130px;pointer-events:auto}#slab{position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:12px;font-weight:900;white-space:nowrap}#strack{position:absolute;left:0;right:0;top:67px;height:18px;border:2px solid #fff;border-radius:12px;background:#06213399}#sknob{position:absolute;left:50%;top:76px;width:62px;height:62px;transform:translate(-50%,-50%);border:5px solid #37434a;border-radius:50%;background:#eee}
+#portrait{display:none;position:fixed;z-index:99;inset:0;align-items:center;justify-content:center;background:#071822;color:white;font-size:22px}@media(orientation:portrait){#portrait{display:flex}}
+</style></head><body>
+
 <canvas id="game"></canvas>
 
 <div id="start">
   <div class="card">
     <h1>🚤 BOAT RACER</h1>
-    <h2>操作テスト v13</h2>
-    <p>左右操舵・周回方向・視点を重点修正。<br>下→ / 右↑ / 上← / 左↓ を固定。</p>
-    <button id="startBtn">スタート</button>
+    <h2>操作テスト v14</h2>
+    <p>v13のハンドル・周回方向は維持。<br>動画寄りの低い艇上視点。</p>
+    <button id="go">スタート</button>
   </div>
 </div>
 
 <div id="ui">
-  <div id="version">BOAT RACER v13</div>
-  <div id="direction">下→　右↑　上←　左↓</div>
-  <div id="steerState">舵：中央</div>
-  <div id="speed">0.0 km/h</div>
+  <div id="top">
+    <div class="badge">BOAT RACER v14</div>
+    <div class="badge">下→　右↑　上←　左↓</div>
+  </div>
+
   <button id="reset">リセット</button>
 
+  <div id="speedbox">
+    <div id="speed">0.0<small>km/h</small></div>
+    <div id="state">舵：中央</div>
+  </div>
+
   <div id="throttle">
-    <div id="tLabel">アクセル</div>
-    <div id="tTrack"></div>
-    <div id="tKnob"></div>
+    <div id="tlab">アクセル</div>
+    <div id="ttrack"></div>
+    <div id="tfill"></div>
+    <div id="tknob"></div>
   </div>
 
   <div id="steer">
-    <div id="sLabel">← 左　ハンドル　右 →</div>
-    <div id="sTrack"></div>
-    <div id="sKnob"></div>
+    <div id="slab">← 左　ハンドル　右 →</div>
+    <div id="strack"></div>
+    <div id="sknob"></div>
   </div>
 </div>
 
@@ -71,1229 +63,1447 @@ button{border:0;border-radius:13px;font-weight:900}
 <script>
 "use strict";
 
-const $ = id => document.getElementById(id);
-const canvas = $("game");
-const ctx = canvas.getContext("2d");
-const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
-const lerp = (a,b,t) => a+(b-a)*t;
+const $=id=>document.getElementById(id);
+const c=$("game");
+const x=c.getContext("2d");
 
-function lerpAngle(a,b,t){
-  const d = Math.atan2(Math.sin(b-a),Math.cos(b-a));
-  return a+d*t;
-}
+const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lp=(a,b,t)=>a+(b-a)*t;
+const la=(a,b,t)=>a+Math.atan2(Math.sin(b-a),Math.cos(b-a))*t;
 
-let W=innerWidth,H=innerHeight,DPR=1,last=performance.now();
-let running=false,throttle=0,steering=0;
+let W=innerWidth;
+let H=innerHeight;
+let D=1;
+let last=performance.now();
+let run=false;
+let thr=0;
+let steer=0;
+let t=0;
 
-const WORLD={w:1800,h:900};
+const world={w:1800,h:900};
 
-const COURSE={
-  leftX:650,
-  rightX:1150,
-  centerY:450,
-  bottomY:650,
-  topY:250,
-  radius:200
+const course={
+  lx:650,
+  rx:1150,
+  cy:450,
+  by:650,
+  ty:250,
+  r:200
 };
 
 const marks=[
-  {x:COURSE.leftX,y:COURSE.centerY,r:38},
-  {x:COURSE.rightX,y:COURSE.centerY,r:38}
+  {x:course.lx,y:course.cy,r:38},
+  {x:course.rx,y:course.cy,r:38}
 ];
 
-const boat={
+const b={
   x:470,
-  y:COURSE.bottomY,
-  angle:0,
+  y:course.by,
+  a:0,
   vx:0,
   vy:0,
   yaw:0,
-  engine:0,
-  radius:22
+  eng:0,
+  r:22
 };
 
-const camera={
-  x:boat.x,
-  y:boat.y,
-  angle:boat.angle
+const cam={
+  x:b.x,
+  y:b.y,
+  a:b.a,
+  roll:0,
+  bob:0,
+  sx:0,
+  sy:0
 };
 
 function resize(){
   W=innerWidth;
   H=innerHeight;
-  DPR=Math.min(devicePixelRatio||1,2);
+  D=Math.min(devicePixelRatio||1,2);
 
-  canvas.width=Math.round(W*DPR);
-  canvas.height=Math.round(H*DPR);
+  c.width=W*D;
+  c.height=H*D;
 
-  ctx.setTransform(DPR,0,0,DPR,0,0);
+  x.setTransform(D,0,0,D,0,0);
 }
 
 addEventListener("resize",resize);
 resize();
 
-function resetBoat(){
-  throttle=0;
-  steering=0;
+function reset(){
+  thr=0;
+  steer=0;
 
-  boat.x=470;
-  boat.y=COURSE.bottomY;
-  boat.angle=0;
-  boat.vx=0;
-  boat.vy=0;
-  boat.yaw=0;
-  boat.engine=0;
+  Object.assign(b,{
+    x:470,
+    y:course.by,
+    a:0,
+    vx:0,
+    vy:0,
+    yaw:0,
+    eng:0
+  });
 
-  camera.x=boat.x;
-  camera.y=boat.y;
-  camera.angle=boat.angle;
+  Object.assign(cam,{
+    x:b.x,
+    y:b.y,
+    a:b.a,
+    roll:0,
+    bob:0,
+    sx:0,
+    sy:0
+  });
 
-  $("tKnob").style.bottom="0%";
-  $("sKnob").style.left="50%";
-  $("speed").textContent="0.0 km/h";
-  $("steerState").textContent="舵：中央";
+  $("tknob").style.bottom="0%";
+  $("tfill").style.height="0%";
+  $("sknob").style.left="50%";
+  $("speed").innerHTML='0.0<small>km/h</small>';
+  $("state").textContent="舵：中央";
 }
 
-$("startBtn").onclick=()=>{
+$("go").onclick=()=>{
   $("start").style.display="none";
   $("ui").style.display="block";
-
-  running=true;
+  run=true;
   last=performance.now();
-
-  resetBoat();
+  reset();
 };
 
-$("reset").onclick=resetBoat;
+$("reset").onclick=reset;
 
-const tArea=$("throttle");
-const tKnob=$("tKnob");
-const sArea=$("steer");
-const sKnob=$("sKnob");
+const ta=$("throttle");
+const sa=$("steer");
 
-function setThrottle(clientY){
-  const r=tArea.getBoundingClientRect();
+function setThr(y){
+  const r=ta.getBoundingClientRect();
 
-  throttle=clamp(
-    1-(clientY-r.top)/r.height,
+  thr=cl(
+    1-(y-r.top)/r.height,
     0,
     1
   );
 
-  tKnob.style.bottom=`${throttle*100}%`;
+  $("tknob").style.bottom=thr*100+"%";
+  $("tfill").style.height=thr*100+"%";
 }
 
-function setSteering(clientX){
-  const r=sArea.getBoundingClientRect();
+function setSteer(px){
+  const r=sa.getBoundingClientRect();
 
-  steering=clamp(
-    (((clientX-r.left)/r.width)-0.5)*2,
+  steer=cl(
+    (((px-r.left)/r.width)-.5)*2,
     -1,
     1
   );
 
-  sKnob.style.left=`${50+steering*45}%`;
+  $("sknob").style.left=
+    50+steer*45+"%";
 
-  if(steering < -0.08){
-    $("steerState").textContent="舵：左 ←";
-  }else if(steering > 0.08){
-    $("steerState").textContent="舵：右 →";
-  }else{
-    $("steerState").textContent="舵：中央";
-  }
+  $("state").textContent=
+    steer<-.08
+    ?"舵：左 ←"
+    :steer>.08
+    ?"舵：右 →"
+    :"舵：中央";
 }
 
-function centerSteering(){
-  steering=0;
-  sKnob.style.left="50%";
-  $("steerState").textContent="舵：中央";
+function center(){
+  steer=0;
+  $("sknob").style.left="50%";
+  $("state").textContent="舵：中央";
 }
 
-tArea.onpointerdown=e=>{
-  tArea.setPointerCapture(e.pointerId);
-  setThrottle(e.clientY);
+ta.onpointerdown=e=>{
+  ta.setPointerCapture(e.pointerId);
+  setThr(e.clientY);
 };
 
-tArea.onpointermove=e=>{
+ta.onpointermove=e=>{
   if(e.buttons||e.pointerType==="touch"){
-    setThrottle(e.clientY);
+    setThr(e.clientY);
   }
 };
 
-sArea.onpointerdown=e=>{
-  sArea.setPointerCapture(e.pointerId);
-  setSteering(e.clientX);
+sa.onpointerdown=e=>{
+  sa.setPointerCapture(e.pointerId);
+  setSteer(e.clientX);
 };
 
-sArea.onpointermove=e=>{
+sa.onpointermove=e=>{
   if(e.buttons||e.pointerType==="touch"){
-    setSteering(e.clientX);
+    setSteer(e.clientX);
   }
 };
 
-sArea.onpointerup=centerSteering;
-sArea.onpointercancel=centerSteering;
+sa.onpointerup=center;
+sa.onpointercancel=center;
 
-function collideMark(mark){
-  const dx=boat.x-mark.x;
-  const dy=boat.y-mark.y;
-  const dist=Math.hypot(dx,dy);
-  const minimum=boat.radius+mark.r;
+function hit(m){
+  let dx=b.x-m.x;
+  let dy=b.y-m.y;
+  let d=Math.hypot(dx,dy);
+  let mn=b.r+m.r;
 
-  if(dist>=minimum){
-    return;
-  }
+  if(d>=mn)return;
 
-  let nx;
-  let ny;
+  let nx=
+    d>.001
+    ?dx/d
+    :-Math.cos(b.a);
 
-  if(dist>0.001){
-    nx=dx/dist;
-    ny=dy/dist;
-  }else{
-    nx=-Math.cos(boat.angle);
-    ny=-Math.sin(boat.angle);
-  }
+  let ny=
+    d>.001
+    ?dy/d
+    :-Math.sin(b.a);
 
-  boat.x=mark.x+nx*minimum;
-  boat.y=mark.y+ny*minimum;
+  b.x=m.x+nx*mn;
+  b.y=m.y+ny*mn;
 
-  const vn=boat.vx*nx+boat.vy*ny;
+  let vn=
+    b.vx*nx+
+    b.vy*ny;
 
   if(vn<0){
-    boat.vx-=vn*nx;
-    boat.vy-=vn*ny;
+    b.vx-=vn*nx;
+    b.vy-=vn*ny;
   }
 
-  boat.vx*=0.40;
-  boat.vy*=0.40;
-  boat.engine*=0.58;
-  boat.yaw*=0.52;
+  b.vx*=.4;
+  b.vy*=.4;
+  b.eng*=.58;
+  b.yaw*=.52;
 }
 
 function physics(dt){
-  if(!running){
-    return;
-  }
+  if(!run)return;
 
   const MAX=250;
 
-  const targetEngine=throttle*MAX;
+  const target=
+    thr*MAX;
 
-  const engineResponse=
-    targetEngine>boat.engine
+  const res=
+    target>b.eng
     ?1.05
-    :2.30;
+    :2.3;
 
-  boat.engine+=
-    (targetEngine-boat.engine)*
-    Math.min(1,engineResponse*dt);
+  b.eng+=
+    (target-b.eng)*
+    Math.min(1,res*dt);
 
-  const speedRatio=
-    clamp(
-      boat.engine/MAX,
+  const sr=
+    cl(
+      b.eng/MAX,
       0,
       1
     );
 
-  const steerAbs=
-    Math.abs(steering);
+  const as=
+    Math.abs(steer);
 
-  const targetYaw=
-    steering*
-    (0.34+0.92*speedRatio);
+  const ty=
+    steer*
+    (.34+.92*sr);
 
-  const yawResponse=
-    steerAbs<0.02
+  const yr=
+    as<.02
     ?3.6
     :2.2;
 
-  boat.yaw+=
-    (targetYaw-boat.yaw)*
-    Math.min(1,yawResponse*dt);
+  b.yaw+=
+    (ty-b.yaw)*
+    Math.min(1,yr*dt);
 
-  if(steerAbs<0.02){
-    boat.yaw*=
+  if(as<.02){
+    b.yaw*=
       Math.pow(
-        0.28,
+        .28,
         dt
       );
   }
 
-  boat.angle+=
-    boat.yaw*
+  b.a+=
+    b.yaw*
     dt;
 
-  const turnLoss=
-    1-
-    steerAbs*
-    speedRatio*
-    0.24;
-
   const forward=
-    boat.engine*
-    turnLoss;
+    b.eng*
+    (1-as*sr*.24);
 
   const hx=
-    Math.cos(
-      boat.angle
-    );
+    Math.cos(b.a);
 
   const hy=
-    Math.sin(
-      boat.angle
-    );
-
-  const targetVX=
-    hx*
-    forward;
-
-  const targetVY=
-    hy*
-    forward;
+    Math.sin(b.a);
 
   const slip=
-    steerAbs*
-    speedRatio;
+    as*
+    sr;
 
   const grip=
-    3.70-
+    3.7-
     2.45*
     slip;
 
-  boat.vx+=
-    (targetVX-boat.vx)*
+  b.vx+=
+    (hx*forward-b.vx)*
     Math.min(1,grip*dt);
 
-  boat.vy+=
-    (targetVY-boat.vy)*
+  b.vy+=
+    (hy*forward-b.vy)*
     Math.min(1,grip*dt);
 
   const drag=
     Math.max(
       0,
-      1-(0.04+0.11*slip)*dt
+      1-(.04+.11*slip)*dt
     );
 
-  boat.vx*=drag;
-  boat.vy*=drag;
+  b.vx*=drag;
+  b.vy*=drag;
 
-  boat.x+=boat.vx*dt;
-  boat.y+=boat.vy*dt;
+  b.x+=
+    b.vx*
+    dt;
 
-  const margin=35;
+  b.y+=
+    b.vy*
+    dt;
 
-  if(boat.x<margin){
-    boat.x=margin;
-    boat.vx=0;
+  const m=35;
+
+  if(b.x<m){
+    b.x=m;
+    b.vx=0;
   }
 
-  if(boat.x>WORLD.w-margin){
-    boat.x=WORLD.w-margin;
-    boat.vx=0;
+  if(b.x>world.w-m){
+    b.x=world.w-m;
+    b.vx=0;
   }
 
-  if(boat.y<margin){
-    boat.y=margin;
-    boat.vy=0;
+  if(b.y<m){
+    b.y=m;
+    b.vy=0;
   }
 
-  if(boat.y>WORLD.h-margin){
-    boat.y=WORLD.h-margin;
-    boat.vy=0;
+  if(b.y>world.h-m){
+    b.y=world.h-m;
+    b.vy=0;
   }
 
-  marks.forEach(
-    collideMark
-  );
+  marks.forEach(hit);
 
-  const speed=
+  $("speed").innerHTML=
+    (
+      Math.hypot(
+        b.vx,
+        b.vy
+      )/MAX*82
+    ).toFixed(1)
+    +
+    '<small>km/h</small>';
+}
+
+function camera(dt){
+  const sp=
     Math.hypot(
-      boat.vx,
-      boat.vy
+      b.vx,
+      b.vy
     );
 
-  $("speed").textContent=
-    `${(speed/MAX*82).toFixed(1)} km/h`;
-}
-
-function updateCamera(dt){
-  const followBack=26;
-
-  const targetX=
-    boat.x-
-    Math.cos(boat.angle)*
-    followBack;
-
-  const targetY=
-    boat.y-
-    Math.sin(boat.angle)*
-    followBack;
-
-  const posT=
-    1-
-    Math.exp(
-      -9.0*
-      dt
-    );
-
-  const angT=
-    1-
-    Math.exp(
-      -4.2*
-      dt
-    );
-
-  camera.x=
-    lerp(
-      camera.x,
-      targetX,
-      posT
-    );
-
-  camera.y=
-    lerp(
-      camera.y,
-      targetY,
-      posT
-    );
-
-  camera.angle=
-    lerpAngle(
-      camera.angle,
-      boat.angle,
-      angT
-    );
-}
-
-/*
-  修正版:
-  localRight が
-  画面右へそのまま対応する。
-*/
-
-function cameraSpace(x,y){
-  const dx=
-    x-camera.x;
-
-  const dy=
-    y-camera.y;
-
-  const ca=
-    Math.cos(
-      camera.angle
-    );
-
-  const sa=
-    Math.sin(
-      camera.angle
-    );
-
-  const forward=
-    dx*ca+
-    dy*sa;
-
-  const right=
-    -dx*sa+
-    dy*ca;
-
-  return{
-    forward,
-    right
-  };
-}
-
-function projectWorld(x,y){
-  const p=
-    cameraSpace(
-      x,
-      y
-    );
-
-  if(p.forward < -70){
-    return null;
-  }
-
-  const horizon=
-    H*0.20;
-
-  const bottom=
-    H*0.82;
-
-  const depth=
-    Math.max(
-      0,
-      p.forward+40
-    );
-
-  const perspective=
-    1/
-    (1+depth/720);
-
-  return{
-
-    x:
-      W*0.5+
-      p.right*
-      perspective*
-      1.08,
-
-    y:
-      horizon+
-      (bottom-horizon)*
-      perspective,
-
-    scale:
-      clamp(
-        1.35*
-        perspective,
-        0.38,
-        1.18
-      ),
-
-    forward:
-      p.forward,
-
-    right:
-      p.right
-  };
-}
-
-function drawWater(){
-  const grad=
-    ctx.createLinearGradient(
-      0,
-      0,
-      0,
-      H
-    );
-
-  grad.addColorStop(
-    0,
-    "#66c9e6"
-  );
-
-  grad.addColorStop(
-    0.35,
-    "#28add2"
-  );
-
-  grad.addColorStop(
-    1,
-    "#08799f"
-  );
-
-  ctx.fillStyle=
-    grad;
-
-  ctx.fillRect(
-    0,
-    0,
-    W,
-    H
-  );
-
-  const horizon=
-    H*0.20;
-
-  ctx.strokeStyle=
-    "rgba(255,255,255,.11)";
-
-  ctx.lineWidth=
-    1;
-
-  for(
-    let i=0;
-    i<12;
-    i++
-  ){
-
-    const t=
-      i/11;
-
-    const y=
-      horizon+
-      (H-horizon)*
-      Math.pow(
-        t,
-        1.7
-      );
-
-    ctx.beginPath();
-
-    for(
-      let x=0;
-      x<=W;
-      x+=40
-    ){
-
-      const wave=
-        Math.sin(
-          x*0.025+
-          i*0.8+
-          performance.now()/900
-        )
-        *
-        (1+t*4);
-
-      if(x===0){
-        ctx.moveTo(
-          x,
-          y+wave
-        );
-      }else{
-        ctx.lineTo(
-          x,
-          y+wave
-        );
-      }
-
-    }
-
-    ctx.stroke();
-
-  }
-
-  ctx.fillStyle=
-    "rgba(10,88,115,.30)";
-
-  ctx.fillRect(
-    0,
-    horizon-2,
-    W,
-    4
-  );
-}
-
-function coursePoints(){
-  const pts=[];
-
-  // 下: 左 → 右
-  for(
-    let i=0;
-    i<=40;
-    i++
-  ){
-
-    const t=
-      i/40;
-
-    pts.push({
-
-      x:
-        lerp(
-          COURSE.leftX,
-          COURSE.rightX,
-          t
-        ),
-
-      y:
-        COURSE.bottomY
-
-    });
-
-  }
-
-  // 右側: 下 → 上
-  for(
-    let i=1;
-    i<=50;
-    i++
-  ){
-
-    const t=
-      i/50;
-
-    const a=
-      Math.PI/2-
-      Math.PI*
-      t;
-
-    pts.push({
-
-      x:
-        COURSE.rightX+
-        COURSE.radius*
-        Math.cos(a),
-
-      y:
-        COURSE.centerY+
-        COURSE.radius*
-        Math.sin(a)
-
-    });
-
-  }
-
-  // 上: 右 → 左
-  for(
-    let i=1;
-    i<=40;
-    i++
-  ){
-
-    const t=
-      i/40;
-
-    pts.push({
-
-      x:
-        lerp(
-          COURSE.rightX,
-          COURSE.leftX,
-          t
-        ),
-
-      y:
-        COURSE.topY
-
-    });
-
-  }
-
-  // 左側: 上 → 下
-  for(
-    let i=1;
-    i<=50;
-    i++
-  ){
-
-    const t=
-      i/50;
-
-    const a=
-      -Math.PI/2-
-      Math.PI*
-      t;
-
-    pts.push({
-
-      x:
-        COURSE.leftX+
-        COURSE.radius*
-        Math.cos(a),
-
-      y:
-        COURSE.centerY+
-        COURSE.radius*
-        Math.sin(a)
-
-    });
-
-  }
-
-  return pts;
-}
-
-function drawCourse(){
-  const pts=
-    coursePoints();
-
-  ctx.strokeStyle=
-    "rgba(255,255,255,.25)";
-
-  ctx.lineWidth=
-    2;
-
-  ctx.setLineDash(
-    [8,10]
-  );
-
-  let drawing=
-    false;
-
-  ctx.beginPath();
-
-  for(
-    const p
-    of pts
-  ){
-
-    const s=
-      projectWorld(
-        p.x,
-        p.y
-      );
-
-    if(!s){
-
-      drawing=
-        false;
-
-      continue;
-
-    }
-
-    if(!drawing){
-
-      ctx.moveTo(
-        s.x,
-        s.y
-      );
-
-      drawing=
-        true;
-
-    }else{
-
-      ctx.lineTo(
-        s.x,
-        s.y
-      );
-
-    }
-
-  }
-
-  ctx.stroke();
-
-  ctx.setLineDash(
-    []
-  );
-
-  marks.forEach(
-    drawMark
-  );
-
-  drawWorldArrow(
-    850,
-    COURSE.bottomY,
-    "→"
-  );
-
-  drawWorldArrow(
-    1050,
-    COURSE.bottomY,
-    "→"
-  );
-
-  drawWorldArrow(
-    1335,
-    COURSE.centerY,
-    "↑"
-  );
-
-  drawWorldArrow(
-    1000,
-    COURSE.topY,
-    "←"
-  );
-
-  drawWorldArrow(
-    800,
-    COURSE.topY,
-    "←"
-  );
-
-  drawWorldArrow(
-    465,
-    COURSE.centerY,
-    "↓"
-  );
-}
-
-function drawWorldArrow(
-  x,
-  y,
-  text
-){
-
-  const p=
-    projectWorld(
-      x,
-      y
-    );
-
-  if(!p){
-    return;
-  }
-
-  ctx.save();
-
-  ctx.translate(
-    p.x,
-    p.y
-  );
-
-  ctx.scale(
-    p.scale,
-    p.scale
-  );
-
-  ctx.font=
-    "bold 26px sans-serif";
-
-  ctx.textAlign=
-    "center";
-
-  ctx.textBaseline=
-    "middle";
-
-  ctx.fillStyle=
-    "rgba(255,255,255,.78)";
-
-  ctx.fillText(
-    text,
-    0,
-    0
-  );
-
-  ctx.restore();
-}
-
-function drawMark(mark){
-  const p=
-    projectWorld(
-      mark.x,
-      mark.y
-    );
-
-  if(!p){
-    return;
-  }
-
-  if(
-    p.x<-120||
-    p.x>W+120||
-    p.y<-100||
-    p.y>H+120
-  ){
-    return;
-  }
-
-  ctx.save();
-
-  ctx.translate(
-    p.x,
-    p.y
-  );
-
-  const s=
-    clamp(
-      p.scale*
-      1.35,
-      0.52,
-      1.35
-    );
-
-  ctx.scale(
-    s,
-    s
-  );
-
-  ctx.fillStyle=
-    "rgba(0,0,0,.20)";
-
-  ctx.beginPath();
-
-  ctx.ellipse(
-    6,
-    22,
-    30,
-    10,
-    0,
-    0,
-    Math.PI*2
-  );
-
-  ctx.fill();
-
-  ctx.fillStyle=
-    "#ffd21c";
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    -18,
-    18
-  );
-
-  ctx.lineTo(
-    -13,
-    -23
-  );
-
-  ctx.lineTo(
-    13,
-    -23
-  );
-
-  ctx.lineTo(
-    18,
-    18
-  );
-
-  ctx.closePath();
-
-  ctx.fill();
-
-  ctx.strokeStyle=
-    "#fff";
-
-  ctx.lineWidth=
-    3;
-
-  ctx.stroke();
-
-  ctx.fillStyle=
-    "#e53935";
-
-  ctx.fillRect(
-    -14,
-    -4,
-    28,
-    9
-  );
-
-  ctx.restore();
-}
-
-function drawWake(){
-  const speed=
-    Math.hypot(
-      boat.vx,
-      boat.vy
-    );
-
-  if(speed<12){
-    return;
-  }
-
-  const strength=
-    clamp(
-      speed/250,
+  const sr=
+    cl(
+      sp/250,
       0,
       1
     );
 
-  ctx.strokeStyle=
-    `rgba(255,255,255,${0.20+strength*0.35})`;
+  const f=18;
 
-  ctx.lineWidth=
-    3;
+  const tx=
+    b.x-
+    Math.cos(b.a)*f;
 
-  const cx=
-    W*0.5;
+  const ty=
+    b.y-
+    Math.sin(b.a)*f;
 
-  const by=
-    H*0.90;
+  cam.x=
+    lp(
+      cam.x,
+      tx,
+      1-Math.exp(-11*dt)
+    );
 
-  ctx.beginPath();
+  cam.y=
+    lp(
+      cam.y,
+      ty,
+      1-Math.exp(-11*dt)
+    );
 
-  ctx.moveTo(
-    cx-12,
-    by
-  );
+  cam.a=
+    la(
+      cam.a,
+      b.a,
+      1-Math.exp(-7.5*dt)
+    );
 
-  ctx.lineTo(
-    cx-70-strength*50,
-    H
-  );
+  cam.roll=
+    lp(
+      cam.roll,
+      cl(
+        -b.yaw*
+        (.16+.40*sr),
+        -.115,
+        .115
+      ),
+      1-Math.exp(-4.8*dt)
+    );
 
-  ctx.stroke();
+  let bob=
+    Math.sin(t*7.7)*
+    (.8+2*sr)
+    +
+    Math.sin(t*13.2)*
+    (.35+.7*sr);
 
-  ctx.beginPath();
+  cam.bob=
+    lp(
+      cam.bob,
+      bob,
+      1-Math.exp(-8*dt)
+    );
 
-  ctx.moveTo(
-    cx+12,
-    by
-  );
+  let q=
+    sr*
+    sr*
+    1.1;
 
-  ctx.lineTo(
-    cx+70+strength*50,
-    H
-  );
+  cam.sx=
+    Math.sin(t*23)*
+    q;
 
-  ctx.stroke();
+  cam.sy=
+    Math.cos(t*19)*
+    q*
+    .7;
 }
 
-function drawBoatBow(){
-  const relative=
+function cs(px,py){
+  let dx=
+    px-cam.x;
+
+  let dy=
+    py-cam.y;
+
+  let ca=
+    Math.cos(cam.a);
+
+  let sa=
+    Math.sin(cam.a);
+
+  return{
+    f:
+      dx*ca+
+      dy*sa,
+
+    r:
+      -dx*sa+
+      dy*ca
+  };
+}
+
+function proj(px,py,h=0){
+  let p=
+    cs(
+      px,
+      py
+    );
+
+  if(p.f<-32){
+    return null;
+  }
+
+  let hor=
+    H*.315+
+    cam.bob+
+    cam.sy;
+
+  let F=
+    Math.max(
+      420,
+      W*.72
+    );
+
+  let z=
+    Math.max(
+      36,
+      p.f+72
+    );
+
+  let sc=
+    F/z;
+
+  let sx=
+    W*.5+
+    p.r*sc+
+    cam.sx;
+
+  let sy=
+    hor+
+    (54-h)*sc;
+
+  let dx=
+    sx-W*.5;
+
+  let dy=
+    sy-hor;
+
+  let cr=
+    Math.cos(cam.roll);
+
+  let sr=
+    Math.sin(cam.roll);
+
+  return{
+    x:
+      W*.5+
+      dx*cr-
+      dy*sr,
+
+    y:
+      hor+
+      dx*sr+
+      dy*cr,
+
+    sc,
+    f:p.f
+  };
+}
+
+function sky(){
+  let hor=
+    H*.315+
+    cam.bob+
+    cam.sy;
+
+  let g=
+    x.createLinearGradient(
+      0,
+      0,
+      0,
+      hor
+    );
+
+  g.addColorStop(
+    0,
+    "#58c0e9"
+  );
+
+  g.addColorStop(
+    .55,
+    "#91dbf4"
+  );
+
+  g.addColorStop(
+    1,
+    "#e5f9ff"
+  );
+
+  x.fillStyle=g;
+
+  x.fillRect(
+    0,
+    0,
+    W,
+    hor+2
+  );
+
+  x.save();
+
+  x.globalAlpha=.5;
+
+  x.fillStyle="#fff";
+
+  let drift=
+    (t*5)%W;
+
+  for(let i=-1;i<5;i++){
+    let px=
+      i*260+
+      120-
+      drift*.15;
+
+    let py=
+      55+
+      (i%2)*25;
+
+    x.beginPath();
+    x.ellipse(px,py,72,18,0,0,7);
+    x.ellipse(px+45,py-7,40,19,0,0,7);
+    x.ellipse(px-42,py+3,36,15,0,0,7);
+    x.fill();
+  }
+
+  x.restore();
+}
+
+function shore(){
+  let h=
+    H*.315+
+    cam.bob+
+    cam.sy;
+
+  x.fillStyle="#335b6a";
+
+  x.fillRect(
+    0,
+    h-3,
+    W,
+    12
+  );
+
+  x.fillStyle="#526f7a";
+
+  x.beginPath();
+  x.moveTo(0,h-26);
+  x.lineTo(W*.16,h-38);
+  x.lineTo(W*.30,h-26);
+  x.lineTo(W*.45,h-46);
+  x.lineTo(W*.62,h-31);
+  x.lineTo(W*.79,h-43);
+  x.lineTo(W,h-29);
+  x.lineTo(W,h);
+  x.lineTo(0,h);
+  x.fill();
+
+  x.fillStyle=
+    "#eef7fac7";
+
+  for(let i=0;i<5;i++){
+    let bw=
+      W*.11;
+
+    let bx=
+      (
+        (
+          i*W*.24+
+          90+
+          Math.sin(cam.a)*35
+        )%
+        (W+200)
+      )-
+      100;
+
+    let bh=
+      18+
+      (i%3)*11;
+
+    x.fillRect(
+      bx,
+      h-6-bh,
+      bw,
+      bh
+    );
+  }
+}
+
+function water(){
+  let h=
+    H*.315+
+    cam.bob+
+    cam.sy;
+
+  let g=
+    x.createLinearGradient(
+      0,
+      h,
+      0,
+      H
+    );
+
+  g.addColorStop(
+    0,
+    "#54c4e6"
+  );
+
+  g.addColorStop(
+    .28,
+    "#169fc9"
+  );
+
+  g.addColorStop(
+    1,
+    "#067397"
+  );
+
+  x.fillStyle=g;
+
+  x.fillRect(
+    0,
+    h,
+    W,
+    H-h
+  );
+
+  let sr=
+    cl(
+      Math.hypot(
+        b.vx,
+        b.vy
+      )/250,
+      0,
+      1
+    );
+
+  x.lineWidth=1;
+
+  for(let i=0;i<22;i++){
+    let q=
+      i/21;
+
+    let yy=
+      h+
+      (H-h)*
+      Math.pow(
+        q,
+        1.72
+      );
+
+    let amp=
+      1+
+      q*4.5;
+
+    x.strokeStyle=
+      `rgba(255,255,255,${.06+q*.12})`;
+
+    x.beginPath();
+
+    for(let px=-20;px<=W+20;px+=32){
+      let wv=
+        Math.sin(
+          px*.025+
+          i*.83+
+          t*
+          (1.6+sr*2.6)
+        )*
+        amp;
+
+      if(px===-20){
+        x.moveTo(
+          px,
+          yy+wv
+        );
+      }else{
+        x.lineTo(
+          px,
+          yy+wv
+        );
+      }
+    }
+
+    x.stroke();
+  }
+
+  if(sr>.06){
+    x.save();
+
+    x.globalAlpha=
+      .08+
+      sr*.16;
+
+    x.strokeStyle=
+      "#e8fdff";
+
+    for(let i=0;i<14;i++){
+      let px=
+        (
+          i*97.3+
+          t*100*
+          (.4+sr)
+        )%
+        W;
+
+      let sy=
+        h+
+        30+
+        (
+          (i*43)%
+          Math.max(
+            80,
+            H-h-100
+          )
+        );
+
+      let len=
+        18+
+        sr*55;
+
+      x.beginPath();
+
+      x.moveTo(
+        px,
+        sy
+      );
+
+      x.lineTo(
+        px+
+        (px-W*.5)*.035,
+        sy+len
+      );
+
+      x.stroke();
+    }
+
+    x.restore();
+  }
+}
+
+function path(){
+  let p=[];
+
+  for(let i=0;i<=50;i++){
+    let q=i/50;
+
+    p.push({
+      x:
+        lp(
+          course.lx,
+          course.rx,
+          q
+        ),
+      y:course.by
+    });
+  }
+
+  for(let i=1;i<=64;i++){
+    let q=i/64;
+
+    let a=
+      Math.PI/2-
+      Math.PI*q;
+
+    p.push({
+      x:
+        course.rx+
+        course.r*
+        Math.cos(a),
+
+      y:
+        course.cy+
+        course.r*
+        Math.sin(a)
+    });
+  }
+
+  for(let i=1;i<=50;i++){
+    let q=i/50;
+
+    p.push({
+      x:
+        lp(
+          course.rx,
+          course.lx,
+          q
+        ),
+      y:course.ty
+    });
+  }
+
+  for(let i=1;i<=64;i++){
+    let q=i/64;
+
+    let a=
+      -Math.PI/2-
+      Math.PI*q;
+
+    p.push({
+      x:
+        course.lx+
+        course.r*
+        Math.cos(a),
+
+      y:
+        course.cy+
+        course.r*
+        Math.sin(a)
+    });
+  }
+
+  return p;
+}
+
+function courseDraw(){
+  x.save();
+
+  x.strokeStyle=
+    "#effcff38";
+
+  x.lineWidth=2;
+
+  x.setLineDash(
+    [7,12]
+  );
+
+  let draw=false;
+
+  x.beginPath();
+
+  for(const q of path()){
+    let s=
+      proj(
+        q.x,
+        q.y
+      );
+
+    if(!s||s.f<8){
+      draw=false;
+      continue;
+    }
+
+    if(!draw){
+      x.moveTo(
+        s.x,
+        s.y
+      );
+
+      draw=true;
+    }else{
+      x.lineTo(
+        s.x,
+        s.y
+      );
+    }
+  }
+
+  x.stroke();
+
+  x.restore();
+
+  marks.forEach(mark);
+}
+
+function mark(m){
+  let a=
+    proj(
+      m.x,
+      m.y,
+      0
+    );
+
+  let u=
+    proj(
+      m.x,
+      m.y,
+      66
+    );
+
+  if(
+    !a||
+    !u||
+    a.f<10
+  ){
+    return;
+  }
+
+  let w=
+    cl(
+      34*a.sc,
+      10,
+      105
+    );
+
+  let hh=
+    cl(
+      a.y-u.y,
+      24,
+      190
+    );
+
+  let gx=
+    x.createLinearGradient(
+      a.x-w*.5,
+      a.y-hh,
+      a.x+w*.5,
+      a.y
+    );
+
+  gx.addColorStop(
+    0,
+    "#fff47b"
+  );
+
+  gx.addColorStop(
+    .45,
+    "#ffd927"
+  );
+
+  gx.addColorStop(
+    1,
+    "#e69d00"
+  );
+
+  x.fillStyle=gx;
+
+  x.beginPath();
+
+  x.moveTo(
+    a.x-w*.46,
+    a.y
+  );
+
+  x.lineTo(
+    a.x-w*.32,
+    a.y-hh
+  );
+
+  x.lineTo(
+    a.x+w*.32,
+    a.y-hh
+  );
+
+  x.lineTo(
+    a.x+w*.46,
+    a.y
+  );
+
+  x.closePath();
+  x.fill();
+
+  x.strokeStyle="#fff";
+
+  x.lineWidth=
+    cl(
+      w*.055,
+      1.5,
+      4
+    );
+
+  x.stroke();
+
+  x.fillStyle="#e53232";
+
+  x.fillRect(
+    a.x-w*.38,
+    a.y-hh*.43,
+    w*.76,
+    Math.max(
+      3,
+      hh*.10
+    )
+  );
+}
+
+function spray(){
+  let sr=
+    cl(
+      Math.hypot(
+        b.vx,
+        b.vy
+      )/250,
+      0,
+      1
+    );
+
+  if(sr<.08){
+    return;
+  }
+
+  let cx=
+    W*.5;
+
+  let by=
+    H*.91;
+
+  x.save();
+
+  x.globalCompositeOperation=
+    "screen";
+
+  for(const s of[-1,1]){
+    x.beginPath();
+
+    x.moveTo(
+      cx+
+      s*
+      (36+sr*16),
+      by
+    );
+
+    x.quadraticCurveTo(
+      cx+
+      s*
+      (82+sr*45),
+      H*.87,
+      cx+
+      s*
+      (130+sr*110),
+      H*.98
+    );
+
+    x.strokeStyle=
+      `rgba(230,252,255,${.12+sr*.28})`;
+
+    x.lineWidth=
+      5+
+      sr*7;
+
+    x.stroke();
+  }
+
+  x.restore();
+}
+
+function cockpit(){
+  let sr=
+    cl(
+      Math.hypot(
+        b.vx,
+        b.vy
+      )/250,
+      0,
+      1
+    );
+
+  let rel=
     Math.atan2(
       Math.sin(
-        boat.angle-
-        camera.angle
+        b.a-cam.a
       ),
       Math.cos(
-        boat.angle-
-        camera.angle
+        b.a-cam.a
       )
     );
 
-  const lean=
-    clamp(
-      relative*
-      0.9,
-      -0.36,
-      0.36
+  let turn=
+    cl(
+      rel*.55,
+      -.12,
+      .12
     );
 
-  ctx.save();
+  x.save();
 
-  ctx.translate(
-    W*0.5,
-    H*0.88
+  x.translate(
+    W*.5+
+    cam.sx*.35,
+    H*.925+
+    cam.bob*.25
   );
 
-  ctx.rotate(
-    lean
+  x.rotate(
+    cam.roll*.46+
+    turn
   );
 
-  ctx.fillStyle=
-    "#d81f3a";
+  let s=
+    cl(
+      Math.min(
+        W/1100,
+        H/500
+      ),
+      .68,
+      1.15
+    );
 
-  ctx.beginPath();
+  x.scale(
+    s,
+    s
+  );
 
-  ctx.moveTo(
+  x.fillStyle=
+    "#182126";
+
+  x.beginPath();
+
+  x.moveTo(
+    -235,
+    80
+  );
+
+  x.lineTo(
+    -118,
+    -10
+  );
+
+  x.lineTo(
+    -82,
+    -118
+  );
+
+  x.lineTo(
+    82,
+    -118
+  );
+
+  x.lineTo(
+    118,
+    -10
+  );
+
+  x.lineTo(
+    235,
+    80
+  );
+
+  x.fill();
+
+  let g=
+    x.createLinearGradient(
+      -180,
+      -120,
+      160,
+      70
+    );
+
+  g.addColorStop(
     0,
-    -86
+    "#fff"
   );
 
-  ctx.lineTo(
-    -48,
-    34
+  g.addColorStop(
+    .55,
+    "#e9eef0"
   );
 
-  ctx.lineTo(
-    -29,
-    57
+  g.addColorStop(
+    1,
+    "#aebbc2"
   );
 
-  ctx.lineTo(
-    29,
-    57
-  );
+  x.fillStyle=g;
 
-  ctx.lineTo(
-    48,
-    34
-  );
+  x.beginPath();
 
-  ctx.closePath();
-
-  ctx.fill();
-
-  ctx.fillStyle=
-    "#fff";
-
-  ctx.beginPath();
-
-  ctx.moveTo(
+  x.moveTo(
     0,
-    -68
+    -150
   );
 
-  ctx.lineTo(
-    -25,
-    24
+  x.lineTo(
+    -150,
+    30
   );
 
-  ctx.lineTo(
-    25,
-    24
+  x.lineTo(
+    -210,
+    80
   );
 
-  ctx.closePath();
+  x.lineTo(
+    210,
+    80
+  );
 
-  ctx.fill();
+  x.lineTo(
+    150,
+    30
+  );
 
-  ctx.fillStyle=
-    "#20252a";
+  x.closePath();
 
-  ctx.beginPath();
+  x.fill();
 
-  ctx.ellipse(
+  x.fillStyle=
+    "#d9233e";
+
+  for(const side of[-1,1]){
+    x.beginPath();
+
+    x.moveTo(
+      side*18,
+      -142
+    );
+
+    x.lineTo(
+      side*62,
+      -18
+    );
+
+    x.lineTo(
+      side*165,
+      54
+    );
+
+    x.lineTo(
+      side*90,
+      54
+    );
+
+    x.lineTo(
+      0,
+      -82
+    );
+
+    x.fill();
+  }
+
+  x.fillStyle=
+    "#252f34";
+
+  x.beginPath();
+
+  x.moveTo(
+    -35,
+    45
+  );
+
+  x.lineTo(
+    -18,
+    -42
+  );
+
+  x.lineTo(
+    18,
+    -42
+  );
+
+  x.lineTo(
+    35,
+    45
+  );
+
+  x.fill();
+
+  x.strokeStyle=
+    "#111b20";
+
+  x.lineWidth=7;
+
+  x.beginPath();
+
+  x.arc(
     0,
-    26,
-    12,
-    17,
+    16,
+    36,
     0,
-    0,
-    Math.PI*2
+    7
   );
 
-  ctx.fill();
+  x.stroke();
 
-  ctx.restore();
+  x.fillStyle=
+    "#2b3236";
+
+  x.beginPath();
+
+  x.roundRect(
+    82,
+    -18,
+    70,
+    80,
+    18
+  );
+
+  x.fill();
+
+  x.restore();
+
+  if(sr>.12){
+    x.save();
+
+    x.globalAlpha=
+      .1+
+      sr*.2;
+
+    x.fillStyle="#fff";
+
+    for(let i=0;i<18;i++){
+      let px=
+        W*.5+
+        Math.sin(
+          i*17.3
+        )*
+        W*.30;
+
+      let py=
+        H*.93+
+        (
+          (i*29)%
+          Math.max(
+            12,
+            H*.06
+          )
+        );
+
+      x.beginPath();
+
+      x.arc(
+        px,
+        py,
+        1.3+
+        (i%4)*.8,
+        0,
+        7
+      );
+
+      x.fill();
+    }
+
+    x.restore();
+  }
 }
 
-function drawTurnFeedback(){
-  const meterY=
-    H*0.18;
+function render(){
+  sky();
+  shore();
+  water();
+  courseDraw();
+  spray();
+  cockpit();
 
-  ctx.strokeStyle=
-    "rgba(255,255,255,.35)";
+  let v=
+    x.createRadialGradient(
+      W*.5,
+      H*.48,
+      Math.min(W,H)*.18,
+      W*.5,
+      H*.48,
+      Math.max(W,H)*.68
+    );
 
-  ctx.lineWidth=
-    2;
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    W*0.5-55,
-    meterY
+  v.addColorStop(
+    .55,
+    "#0000"
   );
 
-  ctx.lineTo(
-    W*0.5+55,
-    meterY
+  v.addColorStop(
+    1,
+    "#00121e2e"
   );
 
-  ctx.stroke();
+  x.fillStyle=v;
 
-  ctx.fillStyle=
-    "rgba(255,255,255,.80)";
-
-  ctx.beginPath();
-
-  ctx.arc(
-    W*0.5+
-    steering*45,
-    meterY,
-    4,
+  x.fillRect(
     0,
-    Math.PI*2
+    0,
+    W,
+    H
   );
-
-  ctx.fill();
 }
 
-function loop(now){
-  const dt=
+function loop(n){
+  let dt=
     Math.min(
-      0.035,
-      (now-last)/1000
+      .035,
+      (n-last)/1000
     );
 
-  last=
-    now;
+  last=n;
 
-  physics(
-    dt
-  );
+  t+=dt;
 
-  updateCamera(
-    dt
-  );
+  physics(dt);
+  camera(dt);
+  render();
 
-  drawWater();
-
-  drawCourse();
-
-  drawWake();
-
-  drawBoatBow();
-
-  drawTurnFeedback();
-
-  requestAnimationFrame(
-    loop
-  );
+  requestAnimationFrame(loop);
 }
 
-requestAnimationFrame(
-  loop
-);
+requestAnimationFrame(loop);
 </script>
 
 </body>
