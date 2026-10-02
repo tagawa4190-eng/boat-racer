@@ -1,27 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-<head>す
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<head>
+<meta charset="UTF-8">
 
-<title>BOAT RACER 旋回テスト v5</title>
+<meta
+ name="viewport"
+ content="width=device-width,
+ initial-scale=1,
+ maximum-scale=1,
+ user-scalable=no,
+ viewport-fit=cover"
+>
+
+<title>BOAT RACER v7.1</title>
 
 <style>
+
 *{
  box-sizing:border-box;
- -webkit-user-select:none;
  user-select:none;
+ -webkit-user-select:none;
  touch-action:none;
 }
 
-html,body{
+html,
+body{
  margin:0;
  width:100%;
  height:100%;
  overflow:hidden;
- background:#087fa8;
- font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+ background:#087da5;
+ font-family:
+ -apple-system,
+ BlinkMacSystemFont,
+ sans-serif;
 }
 
 canvas{
@@ -31,332 +43,482 @@ canvas{
  height:100%;
 }
 
+
+/* =====================
+   START
+===================== */
+
 #start{
  position:fixed;
  inset:0;
- z-index:30;
+ z-index:20;
+
  display:flex;
  flex-direction:column;
  align-items:center;
  justify-content:center;
- background:linear-gradient(#54c5ed,#087fa8);
+
  color:white;
+
+ background:
+ linear-gradient(
+  #36b8df,
+  #087da5
+ );
 }
 
 #start h1{
- margin:0 0 8px;
- font-size:clamp(30px,7vw,60px);
+ margin:0 0 10px;
+ font-size:42px;
 }
 
-#start p{
- text-align:center;
- line-height:1.6;
- margin:0 20px 20px;
+#start h2{
+ margin:0 0 25px;
 }
 
-button{
+#start button{
  border:0;
- border-radius:14px;
- font-weight:900;
+ border-radius:15px;
+
+ padding:16px 30px;
+
+ font-size:22px;
+ font-weight:bold;
+
+ background:white;
+ color:#075a78;
 }
 
-#go{
- padding:16px 32px;
- font-size:22px;
- background:white;
- color:#075d7c;
-}
+
+/* =====================
+   HUD
+===================== */
 
 #ui{
  display:none;
+
  position:fixed;
  inset:0;
+
  color:white;
- text-shadow:0 2px 4px #003;
+
+ pointer-events:none;
 }
 
-#title{
+#version{
+
  position:absolute;
- top:2%;
+
+ top:10px;
  left:50%;
- transform:translateX(-50%);
- background:#06283dcc;
- padding:6px 14px;
- border-radius:9px;
- font-weight:900;
+
+ transform:
+ translateX(-50%);
+
+ padding:
+ 7px 15px;
+
+ border-radius:
+ 10px;
+
+ background:
+ rgba(0,30,50,.75);
+
+ font-weight:bold;
 }
 
 #speed{
+
  position:absolute;
- bottom:2%;
- left:50%;
- transform:translateX(-50%);
- font-size:clamp(23px,4vw,42px);
- font-weight:900;
+
+ top:10px;
+ left:15px;
+
+ padding:
+ 7px 12px;
+
+ border-radius:
+ 10px;
+
+ background:
+ rgba(0,30,50,.75);
+
+ font-weight:bold;
 }
 
 #reset{
+
  position:absolute;
- right:2%;
- top:2%;
- padding:8px 12px;
- background:#ffffffdd;
- color:#064b65;
+
+ top:10px;
+ right:15px;
+
+ pointer-events:auto;
+
+ border:0;
+
+ border-radius:
+ 10px;
+
+ padding:
+ 9px 13px;
+
+ font-weight:bold;
 }
+
+
+/* =====================
+   ACCEL
+===================== */
 
 #throttle{
+
  position:absolute;
- left:1.5%;
+
+ left:15px;
  top:25%;
- width:15%;
- height:52%;
+
+ width:110px;
+ height:55%;
+
+ pointer-events:auto;
 }
 
-#tt{
+#throttleText{
+
  position:absolute;
+
+ width:100%;
+
+ text-align:center;
+
+ top:-30px;
+
+ font-weight:bold;
+}
+
+#throttleTrack{
+
+ position:absolute;
+
  left:50%;
  top:0;
- bottom:0;
- width:23px;
- transform:translateX(-50%);
- border:2px solid white;
- border-radius:14px;
- background:#04283a88;
+
+ width:24px;
+ height:100%;
+
+ transform:
+ translateX(-50%);
+
+ border:
+ 2px solid white;
+
+ border-radius:
+ 15px;
+
+ background:
+ rgba(0,20,40,.45);
 }
 
-#tk{
+#throttleKnob{
+
  position:absolute;
+
  left:50%;
  bottom:0;
- width:66px;
+
+ width:70px;
  height:42px;
- transform:translate(-50%,50%);
- background:#eee;
- border:4px solid #555;
- border-radius:9px;
+
+ transform:
+ translate(-50%,50%);
+
+ border:
+ 4px solid #555;
+
+ border-radius:
+ 10px;
+
+ background:white;
 }
 
-#steer{
+
+/* =====================
+   STEERING
+===================== */
+
+#steering{
+
  position:absolute;
- right:1.5%;
- bottom:4%;
- width:34%;
- height:27%;
+
+ right:15px;
+ bottom:15px;
+
+ width:310px;
+ height:135px;
+
+ pointer-events:auto;
 }
 
-#st{
+#steeringText{
+
  position:absolute;
+
+ top:0;
+
+ width:100%;
+
+ text-align:center;
+
+ font-weight:bold;
+}
+
+#steeringTrack{
+
+ position:absolute;
+
  left:0;
  right:0;
- top:58%;
+
+ top:75px;
+
  height:24px;
- border:2px solid white;
- border-radius:14px;
- background:#04283a88;
+
+ border:
+ 2px solid white;
+
+ border-radius:
+ 15px;
+
+ background:
+ rgba(0,20,40,.45);
 }
 
-#sk{
+#steeringKnob{
+
  position:absolute;
+
  left:50%;
- top:58%;
- width:62px;
- height:62px;
- transform:translate(-50%,-50%);
- background:#eee;
- border:6px solid #555;
- border-radius:50%;
+ top:87px;
+
+ width:65px;
+ height:65px;
+
+ transform:
+ translate(-50%,-50%);
+
+ border:
+ 6px solid #555;
+
+ border-radius:
+ 50%;
+
+ background:white;
 }
 
-.label{
- position:absolute;
- font-weight:900;
-}
 
-#la{
- top:-29px;
- left:50%;
- transform:translateX(-50%);
-}
+/* =====================
+   PORTRAIT
+===================== */
 
-#lh{
- top:12%;
- left:50%;
- transform:translateX(-50%);
-}
+#portrait{
 
-#rotate{
  display:none;
+
  position:fixed;
- z-index:99;
+
  inset:0;
- background:#071b29;
- color:white;
+
+ z-index:100;
+
  align-items:center;
  justify-content:center;
+
  text-align:center;
+
+ color:white;
+
+ background:#061d2c;
+
  font-size:22px;
 }
 
-@media(orientation:portrait){
- #rotate{
+@media
+(orientation:portrait){
+
+ #portrait{
   display:flex;
  }
+
 }
+
 </style>
 </head>
 
+
 <body>
 
-<canvas id="c"></canvas>
+
+<canvas id="game"></canvas>
+
 
 <div id="start">
- <h1>🚤 BOAT RACER</h1>
 
- <p>
-  旋回テスト v5<br>
-  ターンマークと平行に直進 → 外側を旋回
- </p>
+ <h1>
+  🚤 BOAT RACER
+ </h1>
 
- <button id="go">
-  テスト開始
+ <h2>
+  操作テスト v7.1
+ </h2>
+
+ <button id="startButton">
+  スタート
  </button>
+
 </div>
 
 
-<div id="ui">
 
- <div id="title">
-  v5 直進＋ターン物理
- </div>
+<div id="ui">
 
  <div id="speed">
   0.0 km/h
  </div>
 
+ <div id="version">
+  操作テスト v7.1
+ </div>
+
  <button id="reset">
-  位置リセット
+  リセット
  </button>
 
 
+ <!-- ACCEL -->
+
  <div id="throttle">
 
-  <span
-   class="label"
-   id="la">
+  <div id="throttleText">
    アクセル
-  </span>
+  </div>
 
-  <div id="tt"></div>
+  <div id="throttleTrack">
+  </div>
 
-  <div id="tk"></div>
+  <div id="throttleKnob">
+  </div>
 
  </div>
 
 
- <div id="steer">
 
-  <span
-   class="label"
-   id="lh">
-   ハンドル
-  </span>
+ <!-- STEERING -->
 
-  <div id="st"></div>
+ <div id="steering">
 
-  <div id="sk"></div>
+  <div id="steeringText">
+   ← 左　ハンドル　右 →
+  </div>
+
+  <div id="steeringTrack">
+  </div>
+
+  <div id="steeringKnob">
+  </div>
 
  </div>
 
 </div>
 
 
-<div id="rotate">
- 📱 iPhoneを横向きにしてプレイ
+
+<div id="portrait">
+
+ 📱 横向きにしてプレイ
+
 </div>
+
 
 
 <script>
 
-"use strict";
+/* ============================
+   BASIC
+============================ */
+
+const canvas =
+document.getElementById(
+ "game"
+);
 
 
-const $ =
-id =>
-document.getElementById(id);
-
-
-const c =
-$("c");
-
-
-const g =
-c.getContext("2d");
+const ctx =
+canvas.getContext(
+ "2d"
+);
 
 
 const clamp =
-(v,a,b) =>
+(v,min,max) =>
 Math.max(
- a,
+ min,
  Math.min(
-  b,
+  max,
   v
  )
 );
 
 
-let W =
-innerWidth;
+let W;
+let H;
+let DPR;
 
 
-let H =
-innerHeight;
-
-
-let D =
-1;
-
-
-let playing =
+let running =
 false;
-
-
-let last =
-performance.now();
 
 
 let throttle =
 0;
 
 
-let steer =
+let steering =
 0;
 
 
-let engineSpeed =
-0;
+let previous =
+performance.now();
 
 
-let boat = {
+
+/* ============================
+   BOAT
+============================ */
+
+const boat = {
 
  x:0,
 
  y:0,
 
- a:0,
+ angle:0,
 
  vx:0,
 
  vy:0,
 
- yaw:0
+ yaw:0,
+
+ engine:0
 
 };
 
 
 
-/* ==========================
-   画面サイズ
-========================== */
+/* ============================
+   RESIZE
+============================ */
 
 function resize(){
 
@@ -368,26 +530,26 @@ function resize(){
  innerHeight;
 
 
- D =
+ DPR =
  Math.min(
   devicePixelRatio || 1,
   2
  );
 
 
- c.width =
- W * D;
+ canvas.width =
+ W * DPR;
 
 
- c.height =
- H * D;
+ canvas.height =
+ H * DPR;
 
 
- g.setTransform(
-  D,
+ ctx.setTransform(
+  DPR,
   0,
   0,
-  D,
+  DPR,
   0,
   0
  );
@@ -398,33 +560,32 @@ function resize(){
 }
 
 
+window.addEventListener(
+ "resize",
+ resize
+);
 
-/* ==========================
-   スタート位置
-========================== */
+
+
+/* ============================
+   RESET
+============================ */
 
 function resetBoat(){
 
- /*
-  ターンマーク2個と
-  平行な位置からスタート。
-
-  艇首は右向き。
-
-       ●       ●
-
-  🚤 → → → → →
- */
-
  boat.x =
- W * .20;
+ W * 0.18;
 
 
  boat.y =
- H * .76;
+ H * 0.76;
 
 
- boat.a =
+ /*
+  0 = 右向き
+ */
+
+ boat.angle =
  0;
 
 
@@ -440,34 +601,69 @@ function resetBoat(){
  0;
 
 
- engineSpeed =
+ boat.engine =
  0;
+
+
+ throttle =
+ 0;
+
+
+ steering =
+ 0;
+
+
+ document
+ .getElementById(
+  "throttleKnob"
+ )
+ .style.bottom =
+ "0%";
+
+
+ document
+ .getElementById(
+  "steeringKnob"
+ )
+ .style.left =
+ "50%";
 
 }
 
-
-addEventListener(
- "resize",
- resize
-);
 
 
 resize();
 
 
 
-$("go").onclick =
+/* ============================
+   START
+============================ */
+
+document
+.getElementById(
+ "startButton"
+)
+.onclick =
 ()=>{
 
- $("start").style.display =
+ document
+ .getElementById(
+  "start"
+ )
+ .style.display =
  "none";
 
 
- $("ui").style.display =
+ document
+ .getElementById(
+  "ui"
+ )
+ .style.display =
  "block";
 
 
- playing =
+ running =
  true;
 
 
@@ -477,416 +673,520 @@ $("go").onclick =
 
 
 
-$("reset").onclick =
+document
+.getElementById(
+ "reset"
+)
+.onclick =
 resetBoat;
 
 
 
-/* ==========================
-   アクセル操作
-========================== */
+/* ============================
+   THROTTLE
+============================ */
 
-function setThrottle(y){
+const throttleArea =
+document.getElementById(
+ "throttle"
+);
 
- const r =
- $("throttle")
+
+const throttleKnob =
+document.getElementById(
+ "throttleKnob"
+);
+
+
+function updateThrottle(y){
+
+ const rect =
+ throttleArea
  .getBoundingClientRect();
 
 
  throttle =
  clamp(
+
   1 -
-  (y-r.top) /
-  r.height,
-  0,
-  1
- );
-
-
- $("tk").style.bottom =
- (throttle*100)
- +"%";
-
-}
-
-
-
-function setSteer(x){
-
- const r =
- $("steer")
- .getBoundingClientRect();
-
-
- steer =
- clamp(
   (
-   (x-r.left) /
-   r.width
-   -.5
-  )*2,
-  -1,
+   y -
+   rect.top
+  )
+  /
+  rect.height,
+
+  0,
+
   1
+
  );
 
 
- $("sk").style.left =
- (50+steer*45)
- +"%";
+ throttleKnob
+ .style.bottom =
+
+ (throttle * 100)
+ +
+ "%";
 
 }
 
 
 
-$("throttle").onpointerdown =
-e=>{
+throttleArea
+.addEventListener(
+ "pointerdown",
+ e=>{
 
- e.currentTarget
- .setPointerCapture(
-  e.pointerId
- );
-
-
- setThrottle(
-  e.clientY
- );
-
-};
+  throttleArea
+  .setPointerCapture(
+   e.pointerId
+  );
 
 
-
-$("throttle").onpointermove =
-e=>{
-
- if(
-  e.buttons ||
-  e.pointerType==="touch"
- ){
-
-  setThrottle(
+  updateThrottle(
    e.clientY
   );
 
  }
-
-};
-
+);
 
 
-$("steer").onpointerdown =
-e=>{
 
- e.currentTarget
- .setPointerCapture(
-  e.pointerId
+throttleArea
+.addEventListener(
+ "pointermove",
+ e=>{
+
+  if(
+   e.buttons ||
+   e.pointerType ===
+   "touch"
+  ){
+
+   updateThrottle(
+    e.clientY
+   );
+
+  }
+
+ }
+);
+
+
+
+/* ============================
+   STEERING
+============================ */
+
+const steeringArea =
+document.getElementById(
+ "steering"
+);
+
+
+const steeringKnob =
+document.getElementById(
+ "steeringKnob"
+);
+
+
+function updateSteering(x){
+
+ const rect =
+ steeringArea
+ .getBoundingClientRect();
+
+
+ steering =
+ clamp(
+
+  (
+   (
+    x -
+    rect.left
+   )
+   /
+   rect.width
+   -
+   0.5
+  )
+  *
+  2,
+
+  -1,
+
+  1
+
  );
 
 
- setSteer(
-  e.clientX
- );
+ steeringKnob
+ .style.left =
 
-};
+ (
+  50 +
+  steering * 45
+ )
+ +
+ "%";
+
+}
 
 
 
-$("steer").onpointermove =
-e=>{
+steeringArea
+.addEventListener(
+ "pointerdown",
+ e=>{
 
- if(
-  e.buttons ||
-  e.pointerType==="touch"
- ){
+  steeringArea
+  .setPointerCapture(
+   e.pointerId
+  );
 
-  setSteer(
+
+  updateSteering(
    e.clientX
   );
 
  }
-
-};
-
+);
 
 
-function centerSteer(){
 
- steer =
+steeringArea
+.addEventListener(
+ "pointermove",
+ e=>{
+
+  if(
+   e.buttons ||
+   e.pointerType ===
+   "touch"
+  ){
+
+   updateSteering(
+    e.clientX
+   );
+
+  }
+
+ }
+);
+
+
+
+function releaseSteering(){
+
+ steering =
  0;
 
 
- $("sk").style.left =
+ steeringKnob
+ .style.left =
  "50%";
 
 }
 
 
-$("steer").onpointerup =
-centerSteer;
+
+steeringArea
+.addEventListener(
+ "pointerup",
+ releaseSteering
+);
 
 
-$("steer").onpointercancel =
-centerSteer;
+steeringArea
+.addEventListener(
+ "pointercancel",
+ releaseSteering
+);
 
 
 
-/* ==========================
-   v5 ボート物理
-========================== */
+/* ============================
+   PHYSICS
+============================ */
 
 function physics(dt){
 
- if(!playing)
- return;
+ if(!running){
+  return;
+ }
+
+
+ const MAX_SPEED =
+ 250;
 
 
  /*
-  最大速度
-
-  表示上は約82km/h
+  ACCELERATION
  */
 
- const MAX =
- 245;
+ const targetEngine =
+ throttle *
+ MAX_SPEED;
 
 
-
- /*
-  アクセルに応じた
-  目標速度
- */
-
- const target =
- MAX *
- throttle;
+ const response =
+ targetEngine >
+ boat.engine
+ ?
+ 1.05
+ :
+ 2.3;
 
 
-
- /*
-  加速と減速
-
-  加速は少しゆっくり
- */
-
- const accel =
- target>engineSpeed
- ?0.78
- :2.0;
-
-
- engineSpeed +=
+ boat.engine +=
  (
-  target -
-  engineSpeed
+  targetEngine -
+  boat.engine
  )
  *
  Math.min(
   1,
-  accel*dt
+  response * dt
  );
 
 
 
  const speedRatio =
  clamp(
-  engineSpeed/MAX,
+  boat.engine /
+  MAX_SPEED,
   0,
   1
  );
 
 
- const absSteer =
- Math.abs(
-  steer
- );
-
-
 
  /*
-  ハンドルを切ったときの
-  旋回力
+  =========================
+  TURN
+  =========================
 
-  一瞬でクルッと
-  曲がらないようにする
+  LEFT  = negative
+
+  RIGHT = positive
  */
-
- const turnAuthority =
- (
-  0.48 +
-  0.68*speedRatio
- );
-
 
 
  const targetYaw =
- steer *
- turnAuthority;
 
+ steering *
 
-
- /*
-  艇首がじわっと
-  回り始める
- */
-
- const yawResponse =
- steer===0
- ?2.5
- :2.05;
+ (
+  0.35 +
+  speedRatio *
+  0.90
+ );
 
 
 
  boat.yaw +=
+
  (
   targetYaw -
   boat.yaw
  )
+
  *
+
  Math.min(
   1,
-  yawResponse*dt
+  2.2 * dt
  );
 
 
 
  /*
-  実際に艇首を回す
+  ハンドルを戻した時
+  旋回を自然に収める
  */
 
- boat.a +=
+ if(
+  Math.abs(
+   steering
+  )
+  <
+  0.02
+ ){
+
+  boat.yaw *=
+  Math.pow(
+   0.25,
+   dt
+  );
+
+ }
+
+
+
+ boat.angle +=
  boat.yaw *
  dt;
 
 
 
  /*
-  旋回中は
-  少し速度が落ちる
+  =========================
+  TURN SPEED LOSS
+  =========================
  */
 
+ const steeringAmount =
+ Math.abs(
+  steering
+ );
+
+
  const turnLoss =
+
  1 -
+
  (
-  0.22 *
-  absSteer *
-  speedRatio
+  steeringAmount *
+  speedRatio *
+  0.24
  );
 
 
 
- const propulsion =
- engineSpeed *
+ const forwardSpeed =
+
+ boat.engine *
+
  turnLoss;
 
 
 
  /*
-  艇首が向いている方向
+  BOAT DIRECTION
  */
 
- const hx =
+ const directionX =
  Math.cos(
-  boat.a
+  boat.angle
  );
 
 
- const hy =
+ const directionY =
  Math.sin(
-  boat.a
+  boat.angle
  );
 
 
 
- const wantVX =
- hx *
- propulsion;
+ const targetVX =
+ directionX *
+ forwardSpeed;
 
 
- const wantVY =
- hy *
- propulsion;
+ const targetVY =
+ directionY *
+ forwardSpeed;
 
 
 
  /*
-  ★重要
+  =========================
+  SLIDE / DRIFT
+  =========================
 
   高速でハンドルを
   大きく切るほど
-  艇が外側へ流れる。
 
-  艇首だけ先に回って、
+  艇首だけ先に向き、
+
   実際の進行方向は
-  少し遅れてついてくる。
+  少し遅れてついてくる
  */
 
  const slip =
- absSteer *
+
+ steeringAmount *
+
  speedRatio;
 
 
 
- const follow =
- 3.15 -
- (
-  1.95 *
-  slip
- );
+ const grip =
+
+ 3.7 -
+
+ slip *
+ 2.45;
 
 
 
  boat.vx +=
+
  (
-  wantVX -
+  targetVX -
   boat.vx
  )
+
  *
+
  Math.min(
   1,
-  follow*dt
+  grip * dt
  );
 
 
 
  boat.vy +=
+
  (
-  wantVY -
+  targetVY -
   boat.vy
  )
+
  *
+
  Math.min(
   1,
-  follow*dt
+  grip * dt
  );
 
 
 
  /*
-  水の抵抗
+  WATER RESISTANCE
  */
 
- const waterDrag =
- Math.max(
-  0,
-  1 -
-  (
-   0.055 +
-   0.17*slip
-  )*dt
- );
+ const resistance =
 
+ Math.max(
+
+  0,
+
+  1 -
+
+  (
+   0.04 +
+   slip * 0.11
+  )
+  *
+  dt
+
+ );
 
 
  boat.vx *=
- waterDrag;
+ resistance;
 
 
  boat.vy *=
- waterDrag;
+ resistance;
 
 
 
  /*
-  実際に移動
+  MOVE
  */
 
  boat.x +=
@@ -901,120 +1201,116 @@ function physics(dt){
 
 
  /*
-  テスト中に
-  画面外へ消えないようにする
+  SCREEN BOUNDARY
  */
 
- const m =
- 24;
+ const margin =
+ 25;
 
 
  if(
-  boat.x<m
+  boat.x <
+  margin
  ){
 
   boat.x =
-  m;
-
+  margin;
 
   boat.vx =
-  Math.max(
-   0,
-   boat.vx
-  )*.2;
+  0;
 
  }
 
 
  if(
-  boat.x>W-m
+  boat.x >
+  W -
+  margin
  ){
 
   boat.x =
-  W-m;
-
+  W -
+  margin;
 
   boat.vx =
-  Math.min(
-   0,
-   boat.vx
-  )*.2;
+  0;
 
  }
 
 
  if(
-  boat.y<m
+  boat.y <
+  margin
  ){
 
   boat.y =
-  m;
-
+  margin;
 
   boat.vy =
-  Math.max(
-   0,
-   boat.vy
-  )*.2;
+  0;
 
  }
 
 
  if(
-  boat.y>H-m
+  boat.y >
+  H -
+  margin
  ){
 
   boat.y =
-  H-m;
-
+  H -
+  margin;
 
   boat.vy =
-  Math.min(
-   0,
-   boat.vy
-  )*.2;
+  0;
 
  }
 
 
 
  /*
-  実際の移動速度
+  SPEED DISPLAY
  */
 
- const actual =
+ const speed =
+
  Math.hypot(
   boat.vx,
   boat.vy
  );
 
 
+ document
+ .getElementById(
+  "speed"
+ )
+ .textContent =
 
- /*
-  km/h表示
- */
-
- $("speed").textContent =
  (
-  actual /
-  MAX *
+  speed /
+  MAX_SPEED *
   82
  )
  .toFixed(1)
- +" km/h";
+
+ +
+
+ " km/h";
 
 }
 
 
 
-/* ==========================
-   固定された水面
-========================== */
+/* ============================
+   WATER
+============================ */
 
 function drawWater(){
 
- const gr =
- g.createLinearGradient(
+ const gradient =
+
+ ctx.createLinearGradient(
   0,
   0,
   0,
@@ -1022,23 +1318,23 @@ function drawWater(){
  );
 
 
- gr.addColorStop(
+ gradient.addColorStop(
   0,
-  "#20a8cf"
+  "#28afd2"
  );
 
 
- gr.addColorStop(
+ gradient.addColorStop(
   1,
-  "#08779f"
+  "#08799f"
  );
 
 
- g.fillStyle =
- gr;
+ ctx.fillStyle =
+ gradient;
 
 
- g.fillRect(
+ ctx.fillRect(
   0,
   0,
   W,
@@ -1047,57 +1343,63 @@ function drawWater(){
 
 
 
- /*
-  水面模様
-
-  カメラが動いていないことを
-  分かりやすくする
- */
-
- g.strokeStyle =
- "rgba(255,255,255,.11)";
+ ctx.strokeStyle =
+ "rgba(255,255,255,.10)";
 
 
- g.lineWidth =
+ ctx.lineWidth =
  1;
+
+
+ const time =
+ performance.now()
+ /
+ 1000;
 
 
 
  for(
-  let y=24;
+  let y=20;
   y<H;
-  y+=32
+  y+=30
  ){
 
-  g.beginPath();
+  ctx.beginPath();
 
 
   for(
    let x=0;
-   x<=W;
-   x+=45
+   x<W;
+   x+=35
   ){
 
-   const yy =
+   const waveY =
+
    y +
+
    Math.sin(
-    x*.035 +
-    y*.025
-   )*3.5;
+    x*0.035 +
+    y*0.02 +
+    time
+   )
+   *
+   3;
 
 
-   if(x===0){
+   if(
+    x===0
+   ){
 
-    g.moveTo(
+    ctx.moveTo(
      x,
-     yy
+     waveY
     );
 
    }else{
 
-    g.lineTo(
+    ctx.lineTo(
      x,
-     yy
+     waveY
     );
 
    }
@@ -1105,319 +1407,296 @@ function drawWater(){
   }
 
 
-  g.stroke();
+  ctx.stroke();
 
  }
-
-
-
- /*
-  コースの目安
-
-  2つのターンマークの
-  外側を時計回り
- */
-
- const cx =
- W*.5;
-
-
- const cy =
- H*.50;
-
-
- const rx =
- W*.37;
-
-
- const ry =
- H*.31;
-
-
- g.setLineDash(
-  [10,13]
- );
-
-
- g.strokeStyle =
- "rgba(255,255,255,.22)";
-
-
- g.lineWidth =
- 3;
-
-
- g.beginPath();
-
-
- g.ellipse(
-  cx,
-  cy,
-  rx,
-  ry,
-  0,
-  0,
-  Math.PI*2
- );
-
-
- g.stroke();
-
-
- g.setLineDash(
-  []
- );
-
-
-
- /*
-  下側
-
-  左 → 右
- */
-
- g.fillStyle =
- "rgba(255,255,255,.55)";
-
-
- g.font =
- "bold 24px sans-serif";
-
-
- g.fillText(
-  "→   →   →   →",
-  W*.35,
-  H*.84
- );
-
-
-
- /*
-  上側
-
-  右 → 左
- */
-
- g.fillText(
-  "←   ←   ←   ←",
-  W*.35,
-  H*.18
- );
 
 }
 
 
 
-/* ==========================
-   ターンマーク
-========================== */
+/* ============================
+   TURN MARK
+============================ */
 
-function mark(x,y){
+function drawMark(x,y){
 
- g.save();
+ ctx.save();
 
 
- g.translate(
+ ctx.translate(
   x,
   y
  );
 
 
- /*
-  影
- */
-
- g.fillStyle =
- "rgba(0,0,0,.2)";
+ ctx.fillStyle =
+ "#ffd21c";
 
 
- g.beginPath();
+ ctx.beginPath();
 
 
- g.ellipse(
-  5,
-  14,
-  19,
-  8,
+ ctx.arc(
   0,
+  0,
+  15,
   0,
   Math.PI*2
  );
 
 
- g.fill();
+ ctx.fill();
 
 
-
- /*
-  黄色部分
- */
-
- g.fillStyle =
- "#ffd21c";
-
-
- g.beginPath();
-
-
- g.moveTo(
-  -12,
-  19
- );
-
-
- g.lineTo(
-  -8,
-  -19
- );
-
-
- g.lineTo(
-  8,
-  -19
- );
-
-
- g.lineTo(
-  12,
-  19
- );
-
-
- g.closePath();
-
-
- g.fill();
-
-
-
- /*
-  赤ライン
- */
-
- g.fillStyle =
- "#e43a36";
-
-
- g.fillRect(
-  -9,
-  -4,
-  18,
-  9
- );
-
-
- g.strokeStyle =
+ ctx.strokeStyle =
  "white";
 
 
- g.lineWidth =
- 2;
+ ctx.lineWidth =
+ 3;
 
 
- g.strokeRect(
-  -9,
-  -4,
-  18,
-  9
+ ctx.stroke();
+
+
+ ctx.fillStyle =
+ "#e53935";
+
+
+ ctx.beginPath();
+
+
+ ctx.arc(
+  0,
+  0,
+  6,
+  0,
+  Math.PI*2
  );
 
 
- g.restore();
+ ctx.fill();
+
+
+ ctx.restore();
 
 }
 
 
 
-/* ==========================
-   引き波
-========================== */
+/* ============================
+   COURSE
+============================ */
 
-function wake(){
+function drawCourse(){
 
- const v =
+ const leftX =
+ W * 0.30;
+
+
+ const rightX =
+ W * 0.70;
+
+
+ const centerY =
+ H * 0.50;
+
+
+
+ /*
+  2つのターンマーク
+ */
+
+ drawMark(
+  leftX,
+  centerY
+ );
+
+
+ drawMark(
+  rightX,
+  centerY
+ );
+
+
+
+ /*
+  コース確認用ライン
+ */
+
+ ctx.strokeStyle =
+ "rgba(255,255,255,.25)";
+
+
+ ctx.lineWidth =
+ 2;
+
+
+ ctx.setLineDash(
+  [10,10]
+ );
+
+
+ ctx.beginPath();
+
+
+
+ /*
+  下
+
+  左 → 右
+ */
+
+ ctx.moveTo(
+  leftX,
+  H*.76
+ );
+
+
+ ctx.lineTo(
+  rightX,
+  H*.76
+ );
+
+
+
+ /*
+  右ターン
+ */
+
+ ctx.bezierCurveTo(
+
+  W*.88,
+  H*.76,
+
+  W*.88,
+  H*.24,
+
+  rightX,
+  H*.24
+
+ );
+
+
+
+ /*
+  上
+
+  右 → 左
+ */
+
+ ctx.lineTo(
+  leftX,
+  H*.24
+ );
+
+
+
+ /*
+  左ターン
+ */
+
+ ctx.bezierCurveTo(
+
+  W*.12,
+  H*.24,
+
+  W*.12,
+  H*.76,
+
+  leftX,
+  H*.76
+
+ );
+
+
+ ctx.stroke();
+
+
+ ctx.setLineDash(
+  []
+ );
+
+}
+
+
+
+/* ============================
+   WAKE
+============================ */
+
+function drawWake(){
+
+ const speed =
  Math.hypot(
   boat.vx,
   boat.vy
  );
 
 
- const s =
- clamp(
-  v/245,
-  0,
-  1
- );
+ if(
+  speed <
+  10
+ ){
+
+  return;
+
+ }
 
 
- if(s<.05)
- return;
-
-
-
- /*
-  艇首方向ではなく
-
-  実際に進んでいる方向から
-  引き波を出す。
-
-  これで横滑りが見える。
- */
-
- const va =
+ const velocityAngle =
  Math.atan2(
   boat.vy,
   boat.vx
  );
 
 
- const back =
- va +
+ const backAngle =
+ velocityAngle +
  Math.PI;
 
 
+ const startX =
 
- const bx =
  boat.x +
+
  Math.cos(
-  back
- )*17;
+  backAngle
+ )
+ *
+ 18;
 
 
- const by =
+ const startY =
+
  boat.y +
+
  Math.sin(
-  back
- )*17;
+  backAngle
+ )
+ *
+ 18;
 
 
+ const wakeLength =
 
- const nx =
- Math.cos(
-  va +
-  Math.PI/2
- );
+ 35 +
 
-
- const ny =
- Math.sin(
-  va +
-  Math.PI/2
- );
+ clamp(
+  speed/250,
+  0,
+  1
+ )
+ *
+ 70;
 
 
-
- const len =
- 28 +
- 72*s;
+ ctx.strokeStyle =
+ "rgba(255,255,255,.55)";
 
 
-
- g.strokeStyle =
- `rgba(255,255,255,${.24+.46*s})`;
-
-
- g.lineWidth =
+ ctx.lineWidth =
  3;
 
 
@@ -1427,32 +1706,45 @@ function wake(){
   of [-1,1]
  ){
 
-  g.beginPath();
+  const sideAngle =
+
+  backAngle +
+
+  side *
+  0.22;
 
 
-  g.moveTo(
-   bx +
-   nx*7*side,
+  ctx.beginPath();
 
-   by +
-   ny*7*side
+
+  ctx.moveTo(
+   startX,
+   startY
   );
 
 
-  g.lineTo(
+  ctx.lineTo(
 
-   bx +
-   Math.cos(back)*len +
-   nx*20*side,
+   startX +
 
-   by +
-   Math.sin(back)*len +
-   ny*20*side
+   Math.cos(
+    sideAngle
+   )
+   *
+   wakeLength,
+
+   startY +
+
+   Math.sin(
+    sideAngle
+   )
+   *
+   wakeLength
 
   );
 
 
-  g.stroke();
+  ctx.stroke();
 
  }
 
@@ -1460,102 +1752,114 @@ function wake(){
 
 
 
-/* ==========================
-   ボート
-========================== */
+/* ============================
+   BOAT
+============================ */
 
 function drawBoat(){
 
- g.save();
+ ctx.save();
 
 
- g.translate(
+ ctx.translate(
   boat.x,
   boat.y
  );
 
 
- g.rotate(
-  boat.a
+ ctx.rotate(
+  boat.angle
  );
 
 
 
  /*
-  赤い船体
+  船体
  */
 
- g.fillStyle =
- "#d91f38";
+ ctx.fillStyle =
+ "#d81f3a";
 
 
- g.beginPath();
+ ctx.beginPath();
 
 
- g.moveTo(
-  24,
+ /*
+  船首
+ */
+
+ ctx.moveTo(
+  30,
   0
  );
 
 
- g.lineTo(
-  -14,
-  -11
+ /*
+  左後ろ
+ */
+
+ ctx.lineTo(
+  -16,
+  -12
  );
 
 
- g.lineTo(
-  -21,
+ ctx.lineTo(
+  -23,
   0
  );
 
 
- g.lineTo(
-  -14,
-  11
+ /*
+  右後ろ
+ */
+
+ ctx.lineTo(
+  -16,
+  12
  );
 
 
- g.closePath();
+ ctx.closePath();
 
 
- g.fill();
+ ctx.fill();
 
 
 
  /*
-  白い艇首
+  白い船体部分
  */
 
- g.fillStyle =
+ ctx.fillStyle =
  "white";
 
 
- g.beginPath();
+ ctx.beginPath();
 
 
- g.moveTo(
-  16,
+ ctx.moveTo(
+  18,
   0
  );
 
 
- g.lineTo(
-  -6,
-  -6
+ ctx.lineTo(
+  -7,
+  -7
  );
 
 
- g.lineTo(
-  -6,
-  6
+ ctx.lineTo(
+  -7,
+  7
  );
 
 
- g.closePath();
+ ctx.closePath();
 
 
- g.fill();
+ ctx.fill();
 
 
 
@@ -1563,46 +1867,55 @@ function drawBoat(){
   操縦席
  */
 
- g.fillStyle =
+ ctx.fillStyle =
  "#222";
 
 
- g.beginPath();
+ ctx.beginPath();
 
 
- g.arc(
+ ctx.arc(
   -5,
   0,
-  3.5,
+  4,
   0,
   Math.PI*2
  );
 
 
- g.fill();
+ ctx.fill();
 
 
- g.restore();
+ ctx.restore();
 
 }
 
 
 
-/* ==========================
-   メインループ
-========================== */
+/* ============================
+   LOOP
+============================ */
 
-function frame(t){
+function loop(time){
 
  const dt =
+
  Math.min(
-  .035,
-  (t-last)/1000
+
+  0.035,
+
+  (
+   time -
+   previous
+  )
+  /
+  1000
+
  );
 
 
- last =
- t;
+ previous =
+ time;
 
 
 
@@ -1614,30 +1927,10 @@ function frame(t){
  drawWater();
 
 
-
- /*
-  左ターンマーク
- */
-
- mark(
-  W*.32,
-  H*.50
- );
+ drawCourse();
 
 
-
- /*
-  右ターンマーク
- */
-
- mark(
-  W*.68,
-  H*.50
- );
-
-
-
- wake();
+ drawWake();
 
 
  drawBoat();
@@ -1645,14 +1938,15 @@ function frame(t){
 
 
  requestAnimationFrame(
-  frame
+  loop
  );
 
 }
 
 
+
 requestAnimationFrame(
- frame
+ loop
 );
 
 </script>
