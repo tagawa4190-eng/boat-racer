@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>BOAT RACER Safari Test</title>
+<style>
+*{box-sizing:border-box;-webkit-user-select:none;user-select:none}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#071827;font-family:-apple-system,BlinkMacSystemFont,sans-serif}
+button{font:inherit}
+#start{position:fixed;inset:0;z-index:100;background:linear-gradient(#62b7ed,#08709d);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff}
+#start h1{font-size:clamp(30px,7vw,65px);margin:0 0 10px}
+#start p{margin:0 0 25px}
+#go{border:0;border-radius:16px;padding:18px 38px;background:#24e1ff;color:#04263a;font-size:24px;font-weight:900;box-shadow:0 6px 20px #003b}
+#game{position:fixed;inset:0;display:none;background:#2389bd;overflow:hidden}
+canvas{width:100%;height:100%;display:block}
+.hud{position:absolute;inset:0;color:#fff;pointer-events:none;text-shadow:0 2px 4px #000}
+#count{position:absolute;left:50%;top:8%;transform:translateX(-50%);font-size:clamp(28px,6vw,60px);font-weight:900}
+#speed{position:absolute;left:50%;bottom:5%;transform:translateX(-50%);font-size:clamp(25px,5vw,48px);font-weight:900}
+#lap{position:absolute;right:3%;top:3%;background:#061b2cbb;padding:8px 14px;border-radius:8px}
+#throttleArea{position:absolute;left:2%;top:22%;width:18%;height:58%;touch-action:none}
+#tTrack{position:absolute;left:50%;top:0;bottom:0;width:25px;transform:translateX(-50%);border:2px solid #cff5ff;border-radius:14px;background:#06263daa}
+#tKnob{position:absolute;left:50%;bottom:0;width:68px;height:42px;transform:translate(-50%,50%);background:#eee;border:4px solid #666;border-radius:10px}
+#steerArea{position:absolute;right:2%;bottom:5%;width:36%;height:30%;touch-action:none}
+#sTrack{position:absolute;left:0;right:0;top:55%;height:26px;border:2px solid #cff5ff;border-radius:14px;background:#06263daa}
+#sKnob{position:absolute;left:50%;top:55%;width:60px;height:60px;transform:translate(-50%,-50%);border-radius:50%;background:#eee;border:6px solid #555}
+.label{position:absolute;color:white;font-weight:800;text-shadow:0 2px 4px #000}
+#tl{left:1%;top:-28px} #sl{left:50%;top:15%;transform:translateX(-50%)}
+#rotate{display:none;position:fixed;inset:0;z-index:999;background:#071827;color:#fff;align-items:center;justify-content:center;text-align:center;padding:30px;font-size:22px}
+@media(orientation:portrait){#rotate{display:flex}}
+</style>
+</head>
+<body>
+<section id="start">
+<h1>🚤 BOAT RACER</h1>
+<p>Safari動作テスト v1</p>
+<button id="go">レース開始</button>
+</section>
+
+<section id="game">
+<canvas id="c"></canvas>
+<div class="hud"><div id="count">3</div><div id="lap">1 / 2周</div><div id="speed">0.0 km/h</div></div>
+<div id="throttleArea"><span class="label" id="tl">アクセル</span><div id="tTrack"></div><div id="tKnob"></div></div>
+<div id="steerArea"><span class="label" id="sl">ハンドル</span><div id="sTrack"></div><div id="sKnob"></div></div>
+</section>
+<div id="rotate">スマホを横向きにしてね 📱↔️</div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+let started=false, throttle=0, steer=0, speed=0, distance=0, lap=1, startAt=0, last=performance.now();
+const c=$("c"),ctx=c.getContext("2d");
+function size(){const d=Math.min(devicePixelRatio||1,2);c.width=innerWidth*d;c.height=innerHeight*d;ctx.setTransform(d,0,0,d,0,0)}
+addEventListener("resize",size);size();
+
+$("go").addEventListener("click",()=>{
+ $("start").style.display="none";$("game").style.display="block";
+ started=true;startAt=performance.now()+3000;
+});
+
+function throttleAt(y){
+ const r=$("throttleArea").getBoundingClientRect();
+ throttle=Math.max(0,Math.min(1,1-(y-r.top)/r.height));
+ $("tKnob").style.bottom=(throttle*100)+"%";
+}
+$("throttleArea").addEventListener("pointerdown",e=>{e.currentTarget.setPointerCapture(e.pointerId);throttleAt(e.clientY)});
+$("throttleArea").addEventListener("pointermove",e=>{if(e.buttons||e.pointerType==="touch")throttleAt(e.clientY)});
+
+function steerAt(x){
+ const r=$("steerArea").getBoundingClientRect();
+ steer=Math.max(-1,Math.min(1,((x-r.left)/r.width-.5)*2));
+ $("sKnob").style.left=(50+steer*45)+"%";
+}
+$("steerArea").addEventListener("pointerdown",e=>{e.currentTarget.setPointerCapture(e.pointerId);steerAt(e.clientX)});
+$("steerArea").addEventListener("pointermove",e=>{if(e.buttons||e.pointerType==="touch")steerAt(e.clientX)});
+$("steerArea").addEventListener("pointerup",()=>{steer=0;$("sKnob").style.left="50%"});
+
+function draw(){
+ const W=innerWidth,H=innerHeight,h=H*.4;
+ let sky=ctx.createLinearGradient(0,0,0,h);sky.addColorStop(0,"#63b7ee");sky.addColorStop(1,"#dff5ff");ctx.fillStyle=sky;ctx.fillRect(0,0,W,h);
+ let sea=ctx.createLinearGradient(0,h,0,H);sea.addColorStop(0,"#339bc7");sea.addColorStop(1,"#075a80");ctx.fillStyle=sea;ctx.fillRect(0,h,W,H-h);
+ ctx.fillStyle="#54767c";ctx.fillRect(0,h-9,W,10);
+ const vx=W/2-steer*80;
+ for(let i=0;i<22;i++){let y=h+((i*48+distance*3)%(H-h));let p=(y-h)/(H-h);ctx.strokeStyle=`rgba(235,255,255,${.08+p*.25})`;ctx.beginPath();ctx.moveTo(vx-20-p*160,y);ctx.lineTo(vx+20+p*160,y);ctx.stroke()}
+ ctx.save();ctx.translate(W/2+steer*25,H*.88);
+ ctx.fillStyle="#d31f36";ctx.beginPath();ctx.moveTo(-W*.2,35);ctx.lineTo(-65,-40);ctx.lineTo(0,-65);ctx.lineTo(65,-40);ctx.lineTo(W*.2,35);ctx.closePath();ctx.fill();
+ ctx.strokeStyle="#222";ctx.lineWidth=8;ctx.beginPath();ctx.arc(0,0,42,0,Math.PI*2);ctx.stroke();ctx.rotate(steer*.9);ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(-35,0);ctx.lineTo(35,0);ctx.moveTo(0,-35);ctx.lineTo(0,35);ctx.stroke();ctx.restore();
+}
+function tick(now){
+ const dt=Math.min((now-last)/1000,.05);last=now;
+ if(started){
+  const left=(startAt-now)/1000;
+  if(left>0){$("count").textContent=Math.ceil(left)}
+  else{
+   $("count").textContent=left>-0.7?"GO!":"";
+   const target=48*throttle;speed+=(target-speed)*dt*1.7;speed-=Math.abs(steer)*speed*.05*dt;distance+=speed*dt;
+   if(distance>900*lap){if(lap===1){lap=2;$("lap").textContent="2 / 2周"}else{$("count").textContent="FINISH!";speed*=.96}}
+  }
+  $("speed").textContent=(speed*1.65).toFixed(1)+" km/h";
+ }
+ draw();requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+</script>
+</body></html>
