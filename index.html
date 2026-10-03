@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>BOAT RACER v15</title>
+<title>BOAT RACER v24</title>
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;user-select:none;touch-action:none}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#061722;font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif}
@@ -14,10 +14,10 @@ canvas{position:fixed;inset:0;width:100%;height:100%}
 .card h1{margin:0 0 6px;font-size:clamp(36px,6vw,58px)}.card h2{margin:0 0 12px}.card p{margin:0 0 20px;line-height:1.6}.card button{padding:15px 30px;border:0;border-radius:13px;background:#fff;color:#075d7a;font-size:21px;font-weight:900}
 #ui{display:none;position:fixed;inset:0;color:#fff;pointer-events:none;text-shadow:0 2px 5px #001923}
 #top{position:absolute;top:7px;left:50%;transform:translateX(-50%);display:flex;gap:8px}.badge{padding:6px 10px;border-radius:9px;background:#052337aa;border:1px solid #ffffff2a;font-size:12px;font-weight:900;white-space:nowrap}
-#reset{position:absolute;right:9px;top:8px;border:0;border-radius:10px;padding:9px 11px;background:#fffffff2;color:#06485f;font-weight:900;pointer-events:auto}
+#lapbox{position:absolute;left:9px;top:8px;min-width:92px;padding:7px 10px;border-radius:10px;background:#052337c7;border:1px solid #ffffff2a;font-size:14px;font-weight:950;text-align:center}#reset{position:absolute;left:9px;top:8px;border:0;border-radius:10px;padding:8px 10px;background:#fffffff2;color:#06485f;font-weight:900;pointer-events:auto}
 #speedbox{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);min-width:165px;padding:7px 14px;text-align:center;border-radius:14px;background:#031c2bdf;border:1px solid #ffffff2b}
 #speed{font-size:36px;font-weight:950;line-height:1}#speed small{font-size:15px;margin-left:5px}#state{font-size:11px;margin-top:5px;font-weight:900}
-#distance{position:absolute;left:50%;top:45px;transform:translateX(-50%);padding:5px 9px;border-radius:8px;background:#0523378c;font-size:11px;font-weight:800}
+#distance{position:absolute;left:50%;top:45px;transform:translateX(-50%);padding:4px 8px;border-radius:7px;background:#05233772;font-size:10px;font-weight:800}
 #throttle{position:absolute;left:8px;top:22%;width:108px;height:56%;pointer-events:auto}#tlab{position:absolute;top:-26px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:900}#ttrack{position:absolute;left:50%;top:0;bottom:0;width:18px;transform:translateX(-50%);border:2px solid #fff;border-radius:12px;background:#06213399}#tfill{position:absolute;left:50%;bottom:0;width:8px;height:0;transform:translateX(-50%);border-radius:8px;background:#7ce6f8;box-shadow:0 0 12px #7ce6f8}#tknob{position:absolute;left:50%;bottom:0;width:66px;height:38px;transform:translate(-50%,50%);border:4px solid #37434a;border-radius:9px;background:#eee}
 #steer{position:absolute;right:8px;bottom:14px;width:min(38vw,350px);height:130px;pointer-events:auto}#slab{position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:12px;font-weight:900;white-space:nowrap}#strack{position:absolute;left:0;right:0;top:67px;height:18px;border:2px solid #fff;border-radius:12px;background:#06213399}#sknob{position:absolute;left:50%;top:76px;width:62px;height:62px;transform:translate(-50%,-50%);border:5px solid #37434a;border-radius:50%;background:#eee}
 #portrait{display:none;position:fixed;z-index:100;inset:0;align-items:center;justify-content:center;background:#071822;color:#fff;font-size:22px}@media(orientation:portrait){#portrait{display:flex}}
@@ -28,35 +28,34 @@ canvas{position:fixed;inset:0;width:100%;height:100%}
 
 <div id="start"><div class="card">
 <h1>🚤 BOAT RACER</h1>
-<h2>操作テスト v15</h2>
-<p>300mスケールの競走水面。<br>ボート＆ターンマークをリアル寄りに更新。</p>
+<h2>操作テスト v24</h2>
+<p>水面・会場リアル強化版。反射・波・引き波・飛沫・樹木・浮き柵・スタンドの奥行きを強化。</p>
 <button id="go">スタート</button>
 </div></div>
 
 <div id="ui">
 <div id="top">
-<div class="badge">BOAT RACER v15</div>
-<div class="badge">下→　右↑　上←　左↓</div>
+  <div class="badge">BOAT RACER v24</div>
+  <div class="badge">VISUAL TEST</div>
 </div>
-<div id="distance">1M ↔ 2M：300m</div>
 <button id="reset">リセット</button>
 
 <div id="speedbox">
-<div id="speed">0.0<small>km/h</small></div>
-<div id="state">舵：中央</div>
+  <div id="speed">0.0<small>km/h</small></div>
+  <div id="state">舵：中央</div>
 </div>
 
 <div id="throttle">
-<div id="tlab">アクセル</div>
-<div id="ttrack"></div>
-<div id="tfill"></div>
-<div id="tknob"></div>
+  <div id="tlab">アクセル</div>
+  <div id="ttrack"></div>
+  <div id="tfill"></div>
+  <div id="tknob"></div>
 </div>
 
 <div id="steer">
-<div id="slab">← 左　ハンドル　右 →</div>
-<div id="strack"></div>
-<div id="sknob"></div>
+  <div id="slab">← 左　ハンドル　右 →</div>
+  <div id="strack"></div>
+  <div id="sknob"></div>
 </div>
 </div>
 
@@ -72,35 +71,27 @@ const ctx=cv.getContext("2d");
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const lerp=(a,b,t)=>a+(b-a)*t;
 const damp=(k,dt)=>1-Math.exp(-k*dt);
+function lerpAngle(a,b,t){return a+Math.atan2(Math.sin(b-a),Math.cos(b-a))*t}
 
-function lerpAngle(a,b,t){
-  return a+Math.atan2(Math.sin(b-a),Math.cos(b-a))*t;
-}
-
-let W=innerWidth;
-let H=innerHeight;
-let DPR=1;
-let last=performance.now();
-let clock=0;
-
-let running=false;
-let throttle=0;
-let steering=0;
+let W=innerWidth,H=innerHeight,DPR=1,last=performance.now(),clock=0;
+let running=false,throttle=0,steering=0;
 
 const WORLD={w:520,h:190};
 
 const COURSE={
-  leftX:110,
-  rightX:410,
-  centerY:95,
-  bottomY:137,
-  topY:53,
-  turnRadius:42
+  leftX:108,
+  rightX:408,
+  leftY:101,
+  rightY:89,
+  bottomY:145,
+  topY:47,
+  leftRadius:44,
+  rightRadius:48
 };
 
 const marks=[
-  {x:COURSE.leftX,y:COURSE.centerY,r:.55},
-  {x:COURSE.rightX,y:COURSE.centerY,r:.55}
+  {x:COURSE.leftX,y:COURSE.leftY,r:.55,label:"2M"},
+  {x:COURSE.rightX,y:COURSE.rightY,r:.55,label:"1M"}
 ];
 
 const boat={
@@ -121,20 +112,115 @@ const camera={
   roll:0,
   bob:0,
   shakeX:0,
-  shakeY:0
+  shakeY:0,
+  lookAssist:0
 };
+
+const RACE={
+  totalLaps:3,
+  startX:165,
+  startHalfWidth:16,
+  rightGate:{
+    x:COURSE.rightX+COURSE.rightRadius,
+    y:COURSE.rightY,
+    r:22
+  },
+  leftGate:{
+    x:COURSE.leftX-COURSE.leftRadius,
+    y:COURSE.leftY,
+    r:22
+  }
+};
+
+let raceStarted=false;
+let currentLap=0;
+let racePhase=0;
+let raceFinished=false;
+
+function updateLapHUD(){
+  const el=$("lapbox");
+  if(!el)return;
+
+  if(raceFinished){
+    el.textContent="GOAL";
+  }else if(!raceStarted){
+    el.textContent=`LAP --/${RACE.totalLaps}`;
+  }else{
+    el.textContent=`LAP ${currentLap}/${RACE.totalLaps}`;
+  }
+}
+
+function crossedStartLine(oldX,oldY){
+  const nearNow=
+    Math.abs(boat.y-COURSE.bottomY)<
+    RACE.startHalfWidth;
+
+  const nearOld=
+    Math.abs(oldY-COURSE.bottomY)<
+    RACE.startHalfWidth;
+
+  return(
+    oldX<RACE.startX &&
+    boat.x>=RACE.startX &&
+    nearNow &&
+    nearOld
+  );
+}
+
+function insideGate(g){
+  return Math.hypot(
+    boat.x-g.x,
+    boat.y-g.y
+  ) < g.r;
+}
+
+function updateRaceProgress(oldX,oldY){
+  if(raceFinished)return;
+
+  if(!raceStarted){
+    if(crossedStartLine(oldX,oldY)){
+      raceStarted=true;
+      currentLap=1;
+      racePhase=1;
+      updateLapHUD();
+    }
+    return;
+  }
+
+  if(racePhase===1){
+    if(insideGate(RACE.rightGate)){
+      racePhase=2;
+    }
+    return;
+  }
+
+  if(racePhase===2){
+    if(insideGate(RACE.leftGate)){
+      racePhase=3;
+    }
+    return;
+  }
+
+  if(racePhase===3 && crossedStartLine(oldX,oldY)){
+    if(currentLap>=RACE.totalLaps){
+      raceFinished=true;
+      updateLapHUD();
+    }else{
+      currentLap++;
+      racePhase=1;
+      updateLapHUD();
+    }
+  }
+}
 
 function resize(){
   W=innerWidth;
   H=innerHeight;
-  DPR=Math.min(devicePixelRatio||1,2);
-
+  DPR=Math.min(devicePixelRatio||1,1.5);
   cv.width=Math.round(W*DPR);
   cv.height=Math.round(H*DPR);
-
   ctx.setTransform(DPR,0,0,DPR,0,0);
 }
-
 addEventListener("resize",resize);
 resize();
 
@@ -167,6 +253,13 @@ function resetBoat(){
   $("sknob").style.left="50%";
   $("speed").innerHTML='0.0<small>km/h</small>';
   $("state").textContent="舵：中央";
+
+  raceStarted=false;
+  currentLap=0;
+  racePhase=0;
+  raceFinished=false;
+  visualTargetIndex=1;
+  updateLapHUD();
 }
 
 $("go").onclick=()=>{
@@ -184,13 +277,7 @@ const sa=$("steer");
 
 function setThrottle(y){
   const r=ta.getBoundingClientRect();
-
-  throttle=clamp(
-    1-(y-r.top)/r.height,
-    0,
-    1
-  );
-
+  throttle=clamp(1-(y-r.top)/r.height,0,1);
   $("tknob").style.bottom=(throttle*100)+"%";
   $("tfill").style.height=(throttle*100)+"%";
 }
@@ -198,20 +285,14 @@ function setThrottle(y){
 function setSteering(px){
   const r=sa.getBoundingClientRect();
 
-  steering=clamp(
-    (((px-r.left)/r.width)-.5)*2,
-    -1,
-    1
-  );
+  steering=clamp((((px-r.left)/r.width)-.5)*2,-1,1);
 
   $("sknob").style.left=(50+steering*45)+"%";
 
   $("state").textContent=
-    steering<-.08
-    ?"舵：左 ←"
-    :steering>.08
-    ?"舵：右 →"
-    :"舵：中央";
+    steering<-.08?"舵：左 ←":
+    steering>.08?"舵：右 →":
+    "舵：中央";
 }
 
 function centerSteering(){
@@ -253,22 +334,13 @@ function collideMark(m){
 
   if(d>=min)return;
 
-  const nx=
-    d>.0001
-    ?dx/d
-    :-Math.cos(boat.angle);
-
-  const ny=
-    d>.0001
-    ?dy/d
-    :-Math.sin(boat.angle);
+  const nx=d>.0001?dx/d:-Math.cos(boat.angle);
+  const ny=d>.0001?dy/d:-Math.sin(boat.angle);
 
   boat.x=m.x+nx*min;
   boat.y=m.y+ny*min;
 
-  const vn=
-    boat.vx*nx+
-    boat.vy*ny;
+  const vn=boat.vx*nx+boat.vy*ny;
 
   if(vn<0){
     boat.vx-=vn*nx;
@@ -284,24 +356,20 @@ function collideMark(m){
 function physics(dt){
   if(!running)return;
 
-  const MAX=22.22;
+  const oldX=boat.x;
+  const oldY=boat.y;
 
-  const targetSpeed=
-    throttle*
-    MAX;
+  const MAX=22.22;
+  const targetSpeed=throttle*MAX;
 
   const response=
-    targetSpeed>
-    boat.speedCommand
+    targetSpeed>boat.speedCommand
     ?.62
     :1.65;
 
   boat.speedCommand+=
     (targetSpeed-boat.speedCommand)*
-    Math.min(
-      1,
-      response*dt
-    );
+    Math.min(1,response*dt);
 
   const speedRatio=
     clamp(
@@ -311,9 +379,7 @@ function physics(dt){
     );
 
   const steerAbs=
-    Math.abs(
-      steering
-    );
+    Math.abs(steering);
 
   const targetYaw=
     steering*
@@ -326,22 +392,13 @@ function physics(dt){
 
   boat.yaw+=
     (targetYaw-boat.yaw)*
-    Math.min(
-      1,
-      yawResponse*dt
-    );
+    Math.min(1,yawResponse*dt);
 
   if(steerAbs<.02){
-    boat.yaw*=
-      Math.pow(
-        .28,
-        dt
-      );
+    boat.yaw*=Math.pow(.28,dt);
   }
 
-  boat.angle+=
-    boat.yaw*
-    dt;
+  boat.angle+=boat.yaw*dt;
 
   const turnLoss=
     1-
@@ -353,23 +410,11 @@ function physics(dt){
     boat.speedCommand*
     turnLoss;
 
-  const hx=
-    Math.cos(
-      boat.angle
-    );
+  const hx=Math.cos(boat.angle);
+  const hy=Math.sin(boat.angle);
 
-  const hy=
-    Math.sin(
-      boat.angle
-    );
-
-  const targetVX=
-    hx*
-    forward;
-
-  const targetVY=
-    hy*
-    forward;
+  const targetVX=hx*forward;
+  const targetVY=hy*forward;
 
   const slip=
     steerAbs*
@@ -377,22 +422,15 @@ function physics(dt){
 
   const grip=
     3.7-
-    2.35*
-    slip;
+    2.35*slip;
 
   boat.vx+=
     (targetVX-boat.vx)*
-    Math.min(
-      1,
-      grip*dt
-    );
+    Math.min(1,grip*dt);
 
   boat.vy+=
     (targetVY-boat.vy)*
-    Math.min(
-      1,
-      grip*dt
-    );
+    Math.min(1,grip*dt);
 
   const drag=
     Math.max(
@@ -403,13 +441,8 @@ function physics(dt){
   boat.vx*=drag;
   boat.vy*=drag;
 
-  boat.x+=
-    boat.vx*
-    dt;
-
-  boat.y+=
-    boat.vy*
-    dt;
+  boat.x+=boat.vx*dt;
+  boat.y+=boat.vy*dt;
 
   const margin=5;
 
@@ -433,20 +466,103 @@ function physics(dt){
     boat.vy=0;
   }
 
-  marks.forEach(
-    collideMark
-  );
+  marks.forEach(collideMark);
+
+  updateVisualTarget();
+  updateRaceProgress(oldX,oldY);
 
   const kmh=
     Math.hypot(
       boat.vx,
       boat.vy
-    )*
-    3.6;
+    )*3.6;
 
   $("speed").innerHTML=
     kmh.toFixed(1)+
     '<small>km/h</small>';
+}
+
+function angleDiff(a,b){
+  return Math.atan2(
+    Math.sin(b-a),
+    Math.cos(b-a)
+  );
+}
+
+let visualTargetIndex=1;
+
+function updateVisualTarget(){
+  if(
+    visualTargetIndex===1 &&
+    boat.x>
+    COURSE.rightX+
+    COURSE.rightRadius*.48
+  ){
+    visualTargetIndex=0;
+  }
+
+  if(
+    visualTargetIndex===0 &&
+    boat.x<
+    COURSE.leftX-
+    COURSE.leftRadius*.48
+  ){
+    visualTargetIndex=1;
+  }
+}
+
+function currentCameraTargetMark(){
+  return marks[visualTargetIndex];
+}
+
+function cameraTurnAssist(){
+  const m=
+    currentCameraTargetMark();
+
+  if(!m)return 0;
+
+  const dx=m.x-boat.x;
+  const dy=m.y-boat.y;
+  const dist=Math.hypot(dx,dy);
+
+  if(dist>205)return 0;
+
+  const markAngle=
+    Math.atan2(dy,dx);
+
+  const diff=
+    angleDiff(
+      boat.angle,
+      markAngle
+    );
+
+  const approach=
+    clamp(
+      (205-dist)/135,
+      0,
+      1
+    );
+
+  const closeFade=
+    clamp(
+      (dist-2.4)/11,
+      0,
+      1
+    );
+
+  const steeringHelp=
+    .68+
+    Math.abs(steering)*.24;
+
+  return clamp(
+    diff,
+    -.58,
+    .58
+  )*
+  .74*
+  approach*
+  closeFade*
+  steeringHelp;
 }
 
 function updateCamera(dt){
@@ -463,126 +579,103 @@ function updateCamera(dt){
       1
     );
 
-  const back=1.15;
+  const back=1.10;
 
   const tx=
     boat.x-
-    Math.cos(
-      boat.angle
-    )*
-    back;
+    Math.cos(boat.angle)*back;
 
   const ty=
     boat.y-
-    Math.sin(
-      boat.angle
-    )*
-    back;
+    Math.sin(boat.angle)*back;
 
   camera.x=
     lerp(
       camera.x,
       tx,
-      damp(
-        10.5,
-        dt
-      )
+      damp(10.5,dt)
     );
 
   camera.y=
     lerp(
       camera.y,
       ty,
-      damp(
-        10.5,
-        dt
-      )
+      damp(10.5,dt)
     );
+
+  const assistTarget=
+    cameraTurnAssist();
+
+  camera.lookAssist=
+    lerp(
+      camera.lookAssist,
+      assistTarget,
+      damp(4.6,dt)
+    );
+
+  const desiredCameraAngle=
+    boat.angle+
+    camera.lookAssist;
 
   camera.angle=
     lerpAngle(
       camera.angle,
-      boat.angle,
-      damp(
-        7.5,
-        dt
-      )
+      desiredCameraAngle,
+      damp(7.5,dt)
     );
 
   const targetRoll=
     clamp(
       -boat.yaw*
-      (.10+.25*sr),
-      -.10,
-      .10
+      (.15+.36*sr)-
+      steering*.035*sr,
+      -.18,
+      .18
     );
 
   camera.roll=
     lerp(
       camera.roll,
       targetRoll,
-      damp(
-        5.0,
-        dt
-      )
+      damp(4.4,dt)
     );
 
   const bobTarget=
-    Math.sin(
-      clock*7.3
-    )*
-    (.15+.32*sr)
-    +
-    Math.sin(
-      clock*12.8
-    )*
-    (.08+.16*sr);
+    Math.sin(clock*5.7)*
+    (.20+.44*sr)+
+    Math.sin(clock*10.9+1.1)*
+    (.10+.21*sr)+
+    Math.sin(clock*16.7)*
+    (.04+.09*sr);
 
   camera.bob=
     lerp(
       camera.bob,
       bobTarget,
-      damp(
-        8,
-        dt
-      )
+      damp(7.2,dt)
     );
 
   const shake=
-    sr*
-    sr*
-    .55;
+    sr*sr*.38;
 
   camera.shakeX=
-    Math.sin(
-      clock*22
-    )*
+    Math.sin(clock*21.0)*
     shake;
 
   camera.shakeY=
-    Math.cos(
-      clock*18.5
-    )*
-    shake*
-    .6;
+    Math.cos(clock*17.4)*
+    shake*.55;
 }
 
 function cameraSpace(x,y){
-  const dx=
-    x-camera.x;
-
-  const dy=
-    y-camera.y;
+  const dx=x-camera.x;
+  const dy=y-camera.y;
 
   const ca=
-    Math.cos(
-      camera.angle
-    );
+    Math.cos(camera.angle);
 
   const sa=
-    Math.sin(
-      camera.angle
-    );
+    Math.sin(camera.angle);
 
   return{
     forward:
@@ -595,33 +688,33 @@ function cameraSpace(x,y){
   };
 }
 
-function projectWorld(
-  x,
-  y,
-  height=0
-){
+function projectWorld(x,y,height=0){
   const p=
-    cameraSpace(
-      x,
-      y
+    cameraSpace(x,y);
+
+  if(p.forward<-2)return null;
+
+  const speedRatio=
+    clamp(
+      Math.hypot(
+        boat.vx,
+        boat.vy
+      )/22.22,
+      0,
+      1
     );
 
-  if(p.forward<-2){
-    return null;
-  }
-
   const horizon=
-    H*.315+
+    H*
+    (.395-speedRatio*.012)+
     camera.bob+
     camera.shakeY;
 
-  const cameraHeight=
-    1.35;
-
+  const cameraHeight=1.08;
   const focal=
     Math.max(
-      510,
-      W*.76
+      430,
+      W*.585
     );
 
   const z=
@@ -630,19 +723,16 @@ function projectWorld(
       p.forward+3.6
     );
 
-  const sc=
-    focal/z;
+  const sc=focal/z;
 
   let sx=
     W*.5+
-    p.right*
-    sc+
+    p.right*sc+
     camera.shakeX;
 
   let sy=
     horizon+
-    (cameraHeight-height)*
-    sc;
+    (cameraHeight-height)*sc;
 
   const dx=
     sx-W*.5;
@@ -651,14 +741,10 @@ function projectWorld(
     sy-horizon;
 
   const cr=
-    Math.cos(
-      camera.roll
-    );
+    Math.cos(camera.roll);
 
   const sr=
-    Math.sin(
-      camera.roll
-    );
+    Math.sin(camera.roll);
 
   sx=
     W*.5+
@@ -679,420 +765,778 @@ function projectWorld(
   };
 }
 
-function drawSky(){
-  const h=
-    H*.315+
+function sceneHorizon(){
+  const sr=
+    clamp(
+      Math.hypot(
+        boat.vx,
+        boat.vy
+      )/22.22,
+      0,
+      1
+    );
+
+  return
+    H*
+    (.395-sr*.012)+
     camera.bob+
     camera.shakeY;
+}
+
+function beginHorizonRoll(){
+  const h=sceneHorizon();
+
+  ctx.save();
+  ctx.translate(W*.5,h);
+  ctx.rotate(camera.roll);
+  ctx.translate(-W*.5,-h);
+
+  return h;
+}
+
+function endHorizonRoll(){
+  ctx.restore();
+}
+
+function drawSky(){
+  const h=
+    beginHorizonRoll();
 
   const g=
     ctx.createLinearGradient(
       0,
+      -H*.25,
       0,
-      0,
-      h
+      h+20
     );
 
-  g.addColorStop(
-    0,
-    "#58bfe8"
-  );
-
-  g.addColorStop(
-    .56,
-    "#93dcf4"
-  );
-
-  g.addColorStop(
-    1,
-    "#e7faff"
-  );
+  g.addColorStop(0,"#78b6d4");
+  g.addColorStop(.35,"#9bcce1");
+  g.addColorStop(.72,"#d5e8ef");
+  g.addColorStop(1,"#f2f4f2");
 
   ctx.fillStyle=g;
 
   ctx.fillRect(
+    -W*.20,
+    -H*.35,
+    W*1.40,
+    h+H*.50
+  );
+
+  const sunX=W*.69;
+  const sunY=h*.20;
+  const sunR=
+    Math.max(
+      90,
+      W*.15
+    );
+
+  const sun=
+    ctx.createRadialGradient(
+      sunX,
+      sunY,
+      2,
+      sunX,
+      sunY,
+      sunR
+    );
+
+  sun.addColorStop(
     0,
-    0,
-    W,
-    h+2
+    "rgba(255,251,230,.36)"
+  );
+
+  sun.addColorStop(
+    .24,
+    "rgba(255,248,224,.16)"
+  );
+
+  sun.addColorStop(
+    1,
+    "rgba(255,248,224,0)"
+  );
+
+  ctx.fillStyle=sun;
+
+  ctx.fillRect(
+    sunX-sunR,
+    sunY-sunR,
+    sunR*2,
+    sunR*2
   );
 
   ctx.save();
-
-  ctx.globalAlpha=
-    .5;
-
-  ctx.fillStyle=
-    "#fff";
+  ctx.globalAlpha=.22;
+  ctx.fillStyle="#ffffff";
 
   const drift=
-    (clock*3.5)%W;
+    (
+      clock*1.5+
+      camera.angle*58
+    )%W;
 
-  for(
-    let i=-1;
-    i<5;
-    i++
-  ){
+  for(let i=-2;i<8;i++){
     const px=
-      i*260+
-      110-
-      drift*.12;
+      i*175+
+      55-
+      drift*.06;
 
     const py=
-      55+
-      (i%2)*26;
+      30+
+      (i%4)*23;
 
     ctx.beginPath();
-
-    ctx.ellipse(
-      px,
-      py,
-      72,
-      18,
-      0,
-      0,
-      Math.PI*2
-    );
-
-    ctx.ellipse(
-      px+45,
-      py-7,
-      42,
-      19,
-      0,
-      0,
-      Math.PI*2
-    );
-
-    ctx.ellipse(
-      px-42,
-      py+2,
-      38,
-      15,
-      0,
-      0,
-      Math.PI*2
-    );
-
+    ctx.ellipse(px,py,70,13,0,0,Math.PI*2);
+    ctx.ellipse(px+43,py-4,41,15,0,0,Math.PI*2);
+    ctx.ellipse(px-38,py+4,35,11,0,0,Math.PI*2);
     ctx.fill();
+  }
+
+  ctx.restore();
+
+  endHorizonRoll();
+}
+
+function drawStadium(){
+  const h=
+    beginHorizonRoll();
+
+  const haze=
+    ctx.createLinearGradient(
+      0,
+      h-55,
+      0,
+      h+18
+    );
+
+  haze.addColorStop(
+    0,
+    "rgba(225,239,242,0)"
+  );
+
+  haze.addColorStop(
+    .62,
+    "rgba(225,239,242,.20)"
+  );
+
+  haze.addColorStop(
+    1,
+    "rgba(210,230,234,.06)"
+  );
+
+  ctx.fillStyle=haze;
+
+  ctx.fillRect(
+    -W*.15,
+    h-60,
+    W*1.3,
+    85
+  );
+
+  ctx.fillStyle=
+    "rgba(42,79,58,.72)";
+
+  ctx.beginPath();
+  ctx.moveTo(-40,h-10);
+
+  for(
+    let x=-40;
+    x<=W+40;
+    x+=18
+  ){
+    const crown=
+      8+
+      (
+        Math.sin(
+          x*.083+
+          camera.angle*2.1
+        )+1
+      )*3.0+
+      (
+        (
+          Math.floor(x/18)%4
+        )+1
+      )*1.4;
+
+    ctx.lineTo(
+      x,
+      h-10-crown
+    );
+  }
+
+  ctx.lineTo(
+    W+40,
+    h+1
+  );
+
+  ctx.lineTo(
+    -40,
+    h+1
+  );
+
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle=
+    "rgba(116,128,126,.48)";
+
+  ctx.fillRect(
+    -30,
+    h-3,
+    W+60,
+    8
+  );
+
+  const segW=22;
+
+  for(
+    let x=-20,n=0;
+    x<W+30;
+    x+=segW,n++
+  ){
+    ctx.fillStyle=
+      n%2===0
+      ?"rgba(225,233,229,.82)"
+      :"rgba(199,75,74,.78)";
+
+    ctx.fillRect(
+      x,
+      h+3,
+      segW-1,
+      3
+    );
+  }
+
+  endHorizonRoll();
+}
+
+function drawShoreReflections(){
+  const h=sceneHorizon();
+
+  ctx.save();
+  ctx.globalCompositeOperation="screen";
+
+  const bands=[
+    {x:.12,w:.035,a:.045},
+    {x:.24,w:.045,a:.060},
+    {x:.39,w:.055,a:.068},
+    {x:.56,w:.050,a:.056},
+    {x:.72,w:.042,a:.055},
+    {x:.88,w:.036,a:.070}
+  ];
+
+  for(
+    let j=0;
+    j<bands.length;
+    j++
+  ){
+    const B=bands[j];
+
+    const baseX=
+      W*B.x+
+      Math.sin(
+        camera.angle*1.4+j
+      )*
+      W*.035;
+
+    for(
+      let i=0;
+      i<14;
+      i++
+    ){
+      const q=
+        (i+1)/14;
+
+      const yy=
+        h+
+        5+
+        Math.pow(
+          q,
+          1.52
+        )*
+        (H-h)*
+        .54;
+
+      const wiggle=
+        Math.sin(
+          clock*1.7+
+          i*.78+
+          j
+        )*
+        8*q;
+
+      const len=
+        B.w*
+        W*
+        (1-q*.55);
+
+      ctx.strokeStyle=
+        `rgba(224,248,252,${B.a*(1-q*.30)})`;
+
+      ctx.lineWidth=
+        .7+
+        q*1.4;
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        baseX-len*.5+wiggle,
+        yy
+      );
+
+      ctx.lineTo(
+        baseX+len*.5+wiggle,
+        yy+1
+      );
+
+      ctx.stroke();
+    }
   }
 
   ctx.restore();
 }
 
-function drawStadium(){
-  const h=
-    H*.315+
-    camera.bob+
-    camera.shakeY;
-
-  ctx.fillStyle=
-    "#3b6271";
-
-  ctx.fillRect(
-    0,
-    h-3,
-    W,
-    13
-  );
-
-  ctx.fillStyle=
-    "#526f79";
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    0,
-    h-25
-  );
-
-  ctx.lineTo(
-    W*.12,
-    h-36
-  );
-
-  ctx.lineTo(
-    W*.28,
-    h-31
-  );
-
-  ctx.lineTo(
-    W*.39,
-    h-55
-  );
-
-  ctx.lineTo(
-    W*.67,
-    h-47
-  );
-
-  ctx.lineTo(
-    W*.79,
-    h-32
-  );
-
-  ctx.lineTo(
-    W,
-    h-41
-  );
-
-  ctx.lineTo(
-    W,
-    h
-  );
-
-  ctx.lineTo(
-    0,
-    h
-  );
-
-  ctx.closePath();
-
-  ctx.fill();
-
-  ctx.fillStyle=
-    "rgba(241,248,250,.80)";
-
-  for(
-    let i=0;
-    i<6;
-    i++
-  ){
-    const bw=
-      W*.105;
-
-    const bx=
-      (
-        (
-          i*W*.21+
-          40+
-          Math.sin(
-            camera.angle
-          )*
-          25
-        )%
-        (W+180)
-      )-
-      90;
-
-    const bh=
-      15+
-      (i%3)*11;
-
-    ctx.fillRect(
-      bx,
-      h-5-bh,
-      bw,
-      bh
-    );
-  }
-
-  ctx.fillStyle=
-    "rgba(20,71,94,.65)";
-
-  ctx.fillRect(
-    0,
-    h+2,
-    W,
-    5
-  );
-}
-
-function drawWater(){
-  const h=
-    H*.315+
-    camera.bob+
-    camera.shakeY;
-
-  const g=
-    ctx.createLinearGradient(
-      0,
-      h,
-      0,
-      H
-    );
-
-  g.addColorStop(
-    0,
-    "#58c5e6"
-  );
-
-  g.addColorStop(
-    .32,
-    "#159ec8"
-  );
-
-  g.addColorStop(
-    1,
-    "#067292"
-  );
-
-  ctx.fillStyle=g;
-
-  ctx.fillRect(
-    0,
-    h,
-    W,
-    H-h
-  );
+function drawSunGlints(){
+  const h=sceneHorizon();
 
   const sr=
     clamp(
       Math.hypot(
         boat.vx,
         boat.vy
-      )/
-      22.22,
+      )/22.22,
       0,
       1
     );
 
+  ctx.save();
+  ctx.globalCompositeOperation="screen";
+
   for(
     let i=0;
-    i<24;
+    i<90;
+    i++
+  ){
+    const a=
+      Math.sin(
+        i*91.731
+      )*.5+.5;
+
+    const b=
+      Math.sin(
+        i*37.117+1.8
+      )*.5+.5;
+
+    const depth=
+      (i+.5)/90;
+
+    const y=
+      h+
+      Math.pow(
+        depth,
+        1.86
+      )*
+      (H-h);
+
+    const x=
+      (
+        a*W+
+        clock*(3+sr*13)+
+        b*29
+      )%
+      (W+60)-
+      30;
+
+    const near=
+      clamp(
+        (y-h)/(H-h),
+        0,
+        1
+      );
+
+    const pulse=
+      .34+
+      .66*
+      (
+        Math.sin(
+          clock*5.5+
+          i*2.17
+        )*
+        .5+.5
+      );
+
+    const alpha=
+      (
+        .012+
+        near*.070
+      )*
+      pulse;
+
+    const len=
+      1.5+
+      near*10+
+      sr*near*4;
+
+    ctx.strokeStyle=
+      `rgba(240,253,255,${alpha})`;
+
+    ctx.lineWidth=
+      .55+
+      near*.75;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      x-len*.5,
+      y
+    );
+
+    ctx.lineTo(
+      x+len*.5,
+      y
+    );
+
+    ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+function drawWater(){
+  const sr=
+    clamp(
+      Math.hypot(
+        boat.vx,
+        boat.vy
+      )/22.22,
+      0,
+      1
+    );
+
+  const h=
+    beginHorizonRoll();
+
+  const base=
+    ctx.createLinearGradient(
+      0,
+      h,
+      0,
+      H+H*.30
+    );
+
+  base.addColorStop(
+    0,
+    "#7fc2ca"
+  );
+
+  base.addColorStop(
+    .08,
+    "#59abb7"
+  );
+
+  base.addColorStop(
+    .25,
+    "#2a8b9a"
+  );
+
+  base.addColorStop(
+    .48,
+    "#177487"
+  );
+
+  base.addColorStop(
+    .73,
+    "#0d6073"
+  );
+
+  base.addColorStop(
+    1,
+    "#084b5b"
+  );
+
+  ctx.fillStyle=base;
+
+  ctx.fillRect(
+    -W*.20,
+    h-3,
+    W*1.40,
+    H-h+H*.35
+  );
+
+  const refl=
+    ctx.createLinearGradient(
+      0,
+      h,
+      0,
+      h+(H-h)*.28
+    );
+
+  refl.addColorStop(
+    0,
+    "rgba(238,246,244,.28)"
+  );
+
+  refl.addColorStop(
+    .50,
+    "rgba(205,235,238,.08)"
+  );
+
+  refl.addColorStop(
+    1,
+    "rgba(205,235,238,0)"
+  );
+
+  ctx.fillStyle=refl;
+
+  ctx.fillRect(
+    -W*.15,
+    h-1,
+    W*1.30,
+    (H-h)*.34
+  );
+
+  for(
+    let i=0;
+    i<32;
     i++
   ){
     const q=
-      i/23;
+      (i+1)/32;
 
     const yy=
       h+
-      (H-h)*
       Math.pow(
         q,
-        1.75
-      );
+        1.76
+      )*
+      (H-h+34);
 
     const amp=
-      .5+
-      q*4.3;
+      .22+
+      q*3.8;
+
+    const phase=
+      clock*
+      (.48+sr*1.75)+
+      i*.61+
+      camera.angle*.25;
 
     ctx.strokeStyle=
-      `rgba(255,255,255,${.05+q*.13})`;
+      `rgba(224,244,246,${.018+q*.058})`;
 
-    ctx.lineWidth=1;
+    ctx.lineWidth=
+      .55+
+      q*.50;
 
     ctx.beginPath();
 
     for(
-      let px=-20;
-      px<=W+20;
-      px+=30
+      let x=-60;
+      x<=W+60;
+      x+=15
     ){
-      const wave=
+      const y=
+        yy+
         Math.sin(
-          px*.027+
-          i*.87+
-          clock*
-          (1.5+sr*2.5)
+          x*.035+
+          phase
         )*
-        amp;
+        amp+
+        Math.sin(
+          x*.013-
+          phase*.58
+        )*
+        amp*.52;
 
-      if(px===-20){
-        ctx.moveTo(
-          px,
-          yy+wave
-        );
+      if(x===-60){
+        ctx.moveTo(x,y);
       }else{
-        ctx.lineTo(
-          px,
-          yy+wave
-        );
+        ctx.lineTo(x,y);
       }
     }
 
     ctx.stroke();
   }
 
-  if(sr>.06){
-    ctx.save();
-
-    ctx.globalAlpha=
-      .06+
-      sr*.16;
-
-    ctx.strokeStyle=
-      "#e6fcff";
-
-    for(
-      let i=0;
-      i<17;
-      i++
-    ){
-      const px=
-        (
-          i*83.7+
-          clock*85*
-          (.5+sr)
-        )%
-        W;
-
-      const sy=
-        h+
-        20+
-        (
-          (i*47)%
-          Math.max(
-            70,
-            H-h-80
-          )
-        );
-
-      const len=
-        13+
-        sr*58;
-
-      ctx.beginPath();
-
-      ctx.moveTo(
-        px,
-        sy
-      );
-
-      ctx.lineTo(
-        px+
-        (px-W*.5)*
-        .028,
-        sy+len
-      );
-
-      ctx.stroke();
-    }
-
-    ctx.restore();
-  }
-}
-
-function coursePoints(){
-  const p=[];
-
   for(
     let i=0;
-    i<=70;
+    i<18;
     i++
   ){
     const q=
-      i/70;
+      (i+1)/18;
+
+    const yy=
+      h+
+      Math.pow(
+        q,
+        1.60
+      )*
+      (H-h+28);
+
+    const amp=
+      .28+
+      q*3.1;
+
+    const phase=
+      clock*
+      (.35+sr*.85)+
+      i*.77;
+
+    ctx.strokeStyle=
+      `rgba(3,57,67,${.012+q*.042})`;
+
+    ctx.lineWidth=
+      .65+
+      q*.60;
+
+    ctx.beginPath();
+
+    for(
+      let x=-60;
+      x<=W+60;
+      x+=20
+    ){
+      const y=
+        yy+
+        Math.sin(
+          x*.029+
+          phase
+        )*
+        amp+
+        Math.sin(
+          x*.009+
+          phase*.31
+        )*
+        amp*.35;
+
+      if(x===-60){
+        ctx.moveTo(x,y);
+      }else{
+        ctx.lineTo(x,y);
+      }
+    }
+
+    ctx.stroke();
+  }
+
+  ctx.save();
+  ctx.globalCompositeOperation="screen";
+
+  for(
+    let i=0;
+    i<28;
+    i++
+  ){
+    const q=
+      (
+        (i*37)%101
+      )/101;
+
+    const y=
+      h+
+      (H-h)*
+      (
+        .10+
+        .85*q*q
+      );
+
+    const x=
+      (
+        i*83.1+
+        clock*
+        (18+sr*54)
+      )%
+      (W+100)-
+      50;
+
+    const len=
+      3+
+      q*19+
+      sr*q*12;
+
+    const alpha=
+      .018+
+      q*.065+
+      sr*q*.025;
+
+    ctx.strokeStyle=
+      `rgba(236,252,252,${alpha})`;
+
+    ctx.lineWidth=
+      .55+
+      q*.60;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      x,
+      y
+    );
+
+    ctx.lineTo(
+      x+len,
+      y+
+      Math.sin(
+        i+clock
+      )*.8
+    );
+
+    ctx.stroke();
+  }
+
+  ctx.restore();
+
+  endHorizonRoll();
+
+  drawShoreReflections();
+  drawSunGlints();
+}
+
+function buildCoursePoints(){
+  const p=[];
+
+  const bottomStart={
+    x:COURSE.leftX-36,
+    y:COURSE.bottomY
+  };
+
+  const bottomEnd={
+    x:COURSE.rightX-8,
+    y:COURSE.bottomY-2
+  };
+
+  for(
+    let i=0;
+    i<=72;
+    i++
+  ){
+    const q=i/72;
 
     p.push({
       x:
         lerp(
-          COURSE.leftX,
-          COURSE.rightX,
+          bottomStart.x,
+          bottomEnd.x,
           q
         ),
+
       y:
-        COURSE.bottomY
+        lerp(
+          bottomStart.y,
+          bottomEnd.y,
+          q
+        )
     });
   }
 
   for(
     let i=1;
-    i<=80;
+    i<=90;
     i++
   ){
-    const q=
-      i/80;
+    const q=i/90;
 
     const a=
       Math.PI/2-
@@ -1101,43 +1545,56 @@ function coursePoints(){
     p.push({
       x:
         COURSE.rightX+
-        COURSE.turnRadius*
+        COURSE.rightRadius*
         Math.cos(a),
 
       y:
-        COURSE.centerY+
-        COURSE.turnRadius*
+        COURSE.rightY+
+        COURSE.rightRadius*
         Math.sin(a)
     });
   }
 
+  const upperStart={
+    x:COURSE.rightX-3,
+    y:COURSE.topY
+  };
+
+  const upperEnd={
+    x:COURSE.leftX+5,
+    y:COURSE.topY+7
+  };
+
   for(
     let i=1;
-    i<=70;
+    i<=72;
     i++
   ){
-    const q=
-      i/70;
+    const q=i/72;
 
     p.push({
       x:
         lerp(
-          COURSE.rightX,
-          COURSE.leftX,
+          upperStart.x,
+          upperEnd.x,
           q
         ),
+
       y:
-        COURSE.topY
+        lerp(
+          upperStart.y,
+          upperEnd.y,
+          q
+        )
     });
   }
 
   for(
     let i=1;
-    i<=80;
+    i<=90;
     i++
   ){
-    const q=
-      i/80;
+    const q=i/90;
 
     const a=
       -Math.PI/2-
@@ -1146,12 +1603,12 @@ function coursePoints(){
     p.push({
       x:
         COURSE.leftX+
-        COURSE.turnRadius*
+        COURSE.leftRadius*
         Math.cos(a),
 
       y:
-        COURSE.centerY+
-        COURSE.turnRadius*
+        COURSE.leftY+
+        COURSE.leftRadius*
         Math.sin(a)
     });
   }
@@ -1159,72 +1616,2084 @@ function coursePoints(){
   return p;
 }
 
-function drawCourse(){
-  ctx.save();
+const COURSE_POINTS_CACHE=
+  buildCoursePoints();
+
+function coursePoints(){
+  return COURSE_POINTS_CACHE;
+}
+
+const VENUE={
+  grandstands:[
+    {
+      x:175,
+      y:174,
+      w:74,
+      h:19,
+      levels:4
+    },
+    {
+      x:260,
+      y:175,
+      w:94,
+      h:25,
+      levels:5
+    },
+    {
+      x:365,
+      y:174,
+      w:92,
+      h:21,
+      levels:4
+    }
+  ],
+
+  bigScreen:{
+    x:458,
+    y:171,
+    w:40,
+    h:27,
+    supportH:10
+  },
+
+  controlTower:{
+    x:103,
+    y:171,
+    w:30,
+    h:22
+  },
+
+  pitHouse:{
+    x:64,
+    y:171,
+    w:34,
+    h:12
+  },
+
+  farBuildings:[
+    {x:80,y:18,w:28,h:7},
+    {x:123,y:18,w:34,h:9},
+    {x:168,y:17,w:40,h:10},
+    {x:220,y:16,w:44,h:12},
+    {x:278,y:16,w:54,h:14},
+    {x:342,y:17,w:46,h:12},
+    {x:398,y:18,w:38,h:10},
+    {x:446,y:19,w:28,h:8}
+  ],
+
+  lightTowers:[
+    {x:48,y:28,h:21},
+    {x:118,y:26,h:24},
+    {x:195,y:25,h:22},
+    {x:275,y:24,h:26},
+    {x:355,y:25,h:23},
+    {x:432,y:27,h:22},
+    {x:486,y:29,h:20},
+    {x:52,y:166,h:20},
+    {x:126,y:168,h:23},
+    {x:222,y:169,h:24},
+    {x:332,y:169,h:24},
+    {x:442,y:167,h:22},
+    {x:494,y:166,h:19}
+  ],
+
+  gantries:[
+    {x:205,y:37,w:28,h:9},
+    {x:302,y:36,w:31,h:9},
+    {x:214,y:154,w:26,h:8},
+    {x:304,y:154,w:29,h:8}
+  ],
+
+  shoreBuoys:[
+    {x:72,y:41},
+    {x:112,y:40},
+    {x:154,y:39},
+    {x:198,y:38},
+    {x:242,y:37},
+    {x:286,y:37},
+    {x:330,y:38},
+    {x:374,y:39},
+    {x:418,y:40},
+    {x:458,y:41},
+    {x:75,y:151},
+    {x:118,y:153},
+    {x:162,y:154},
+    {x:206,y:155},
+    {x:250,y:156},
+    {x:294,y:156},
+    {x:338,y:155},
+    {x:382,y:154},
+    {x:426,y:153},
+    {x:466,y:151}
+  ],
+
+  flags:[
+    {x:138,y:165,h:10},
+    {x:154,y:165,h:10},
+    {x:396,y:165,h:10},
+    {x:412,y:165,h:10},
+    {x:104,y:25,h:9},
+    {x:408,y:25,h:9}
+  ]
+};
+
+function drawLightTower(p){
+  const btm=
+    projectWorld(
+      p.x,
+      p.y,
+      0
+    );
+
+  const top=
+    projectWorld(
+      p.x,
+      p.y,
+      p.h
+    );
+
+  if(
+    !btm||
+    !top||
+    btm.forward<3||
+    btm.forward>330
+  )return;
+
+  if(
+    btm.x<-80||
+    btm.x>W+80
+  )return;
+
+  const lw=
+    clamp(
+      btm.scale*.023,
+      1,
+      3
+    );
 
   ctx.strokeStyle=
-    "rgba(235,252,255,.18)";
+    "rgba(34,48,54,.90)";
 
-  ctx.lineWidth=
-    2;
+  ctx.lineWidth=lw;
 
-  ctx.setLineDash(
-    [7,13]
+  const spread=
+    clamp(
+      btm.scale*.09,
+      1.5,
+      7
+    );
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    btm.x-spread,
+    btm.y
   );
 
-  let active=
-    false;
+  ctx.lineTo(
+    top.x-spread*.35,
+    top.y
+  );
+
+  ctx.moveTo(
+    btm.x+spread,
+    btm.y
+  );
+
+  ctx.lineTo(
+    top.x+spread*.35,
+    top.y
+  );
+
+  ctx.stroke();
+
+  for(
+    let i=1;
+    i<=4;
+    i++
+  ){
+    const q=i/5;
+
+    const yy=
+      lerp(
+        btm.y,
+        top.y,
+        q
+      );
+
+    const xx=
+      lerp(
+        btm.x,
+        top.x,
+        q
+      );
+
+    const sw=
+      spread*
+      (1-q*.55);
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      xx-sw,
+      yy
+    );
+
+    ctx.lineTo(
+      xx+sw,
+      yy-3
+    );
+
+    ctx.stroke();
+  }
+
+  const headW=
+    clamp(
+      btm.scale*.24,
+      4,
+      18
+    );
+
+  ctx.strokeStyle=
+    "rgba(47,57,62,.95)";
+
+  ctx.lineWidth=
+    Math.max(
+      1,
+      lw*1.5
+    );
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    top.x-headW*.5,
+    top.y
+  );
+
+  ctx.lineTo(
+    top.x+headW*.5,
+    top.y
+  );
+
+  ctx.stroke();
+
+  ctx.fillStyle=
+    "rgba(242,249,250,.9)";
+
+  for(
+    let k=-2;
+    k<=2;
+    k++
+  ){
+    ctx.fillRect(
+      top.x+k*(headW/5)-1,
+      top.y-2,
+      2,
+      2
+    );
+  }
+}
+
+function drawWorldBuilding(b){
+  const p1=
+    projectWorld(
+      b.x-b.w*.5,
+      b.y,
+      0
+    );
+
+  const p2=
+    projectWorld(
+      b.x+b.w*.5,
+      b.y,
+      0
+    );
+
+  const p3=
+    projectWorld(
+      b.x+b.w*.5,
+      b.y,
+      b.h
+    );
+
+  const p4=
+    projectWorld(
+      b.x-b.w*.5,
+      b.y,
+      b.h
+    );
+
+  if(
+    !p1||
+    !p2||
+    !p3||
+    !p4
+  )return;
+
+  if(
+    Math.max(
+      p1.forward,
+      p2.forward
+    )<5
+  )return;
+
+  ctx.fillStyle=
+    "rgba(228,239,243,.86)";
+
+  ctx.beginPath();
+  ctx.moveTo(p1.x,p1.y);
+  ctx.lineTo(p2.x,p2.y);
+  ctx.lineTo(p3.x,p3.y);
+  ctx.lineTo(p4.x,p4.y);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.strokeStyle=
+    "rgba(56,82,94,.65)";
+
+  ctx.lineWidth=1;
+  ctx.stroke();
+}
+
+function drawSmallBuoy(p){
+  const b=
+    projectWorld(
+      p.x,
+      p.y,
+      0
+    );
+
+  const t=
+    projectWorld(
+      p.x,
+      p.y,
+      1.0
+    );
+
+  if(
+    !b||
+    !t||
+    b.forward<4||
+    b.forward>260
+  )return;
+
+  if(
+    b.x<-30||
+    b.x>W+30
+  )return;
+
+  const r=
+    clamp(
+      b.scale*.10,
+      1.5,
+      6
+    );
+
+  ctx.fillStyle="#ff7b22";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    b.x,
+    b.y-r*.3,
+    r,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+  ctx.strokeStyle=
+    "rgba(255,255,255,.65)";
+
+  ctx.lineWidth=1;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    b.x,
+    b.y
+  );
+
+  ctx.lineTo(
+    t.x,
+    t.y
+  );
+
+  ctx.stroke();
+}
+
+function drawWorldGantry(g){
+  const l0=
+    projectWorld(
+      g.x-g.w*.5,
+      g.y,
+      0
+    );
+
+  const l1=
+    projectWorld(
+      g.x-g.w*.5,
+      g.y,
+      g.h
+    );
+
+  const r0=
+    projectWorld(
+      g.x+g.w*.5,
+      g.y,
+      0
+    );
+
+  const r1=
+    projectWorld(
+      g.x+g.w*.5,
+      g.y,
+      g.h
+    );
+
+  if(
+    !l0||
+    !l1||
+    !r0||
+    !r1
+  )return;
+
+  if(
+    Math.max(
+      l0.forward,
+      r0.forward
+    )<5
+  )return;
+
+  ctx.strokeStyle=
+    "rgba(35,48,55,.72)";
+
+  ctx.lineWidth=
+    clamp(
+      (
+        l0.scale+
+        r0.scale
+      )*.018,
+      1,
+      3
+    );
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    l0.x,
+    l0.y
+  );
+
+  ctx.lineTo(
+    l1.x,
+    l1.y
+  );
+
+  ctx.moveTo(
+    r0.x,
+    r0.y
+  );
+
+  ctx.lineTo(
+    r1.x,
+    r1.y
+  );
+
+  ctx.moveTo(
+    l1.x,
+    l1.y
+  );
+
+  ctx.lineTo(
+    r1.x,
+    r1.y
+  );
+
+  ctx.stroke();
+}
+
+function drawPitHouse(p){
+  const b1=
+    projectWorld(
+      p.x-p.w*.5,
+      p.y,
+      0
+    );
+
+  const b2=
+    projectWorld(
+      p.x+p.w*.5,
+      p.y,
+      0
+    );
+
+  const t2=
+    projectWorld(
+      p.x+p.w*.5,
+      p.y,
+      p.h
+    );
+
+  const t1=
+    projectWorld(
+      p.x-p.w*.5,
+      p.y,
+      p.h
+    );
+
+  if(
+    !b1||
+    !b2||
+    !t1||
+    !t2
+  )return;
+
+  if(
+    Math.max(
+      b1.forward,
+      b2.forward
+    )<4
+  )return;
+
+  ctx.fillStyle=
+    "rgba(226,233,236,.97)";
+
+  ctx.beginPath();
+  ctx.moveTo(b1.x,b1.y);
+  ctx.lineTo(b2.x,b2.y);
+  ctx.lineTo(t2.x,t2.y);
+  ctx.lineTo(t1.x,t1.y);
+  ctx.closePath();
+  ctx.fill();
+
+  const w1=
+    projectWorld(
+      p.x-p.w*.42,
+      p.y,
+      p.h*.42
+    );
+
+  const w2=
+    projectWorld(
+      p.x+p.w*.42,
+      p.y,
+      p.h*.42
+    );
+
+  const w3=
+    projectWorld(
+      p.x+p.w*.42,
+      p.y,
+      p.h*.72
+    );
+
+  const w4=
+    projectWorld(
+      p.x-p.w*.42,
+      p.y,
+      p.h*.72
+    );
+
+  if(
+    w1&&
+    w2&&
+    w3&&
+    w4
+  ){
+    ctx.fillStyle=
+      "rgba(39,70,84,.88)";
+
+    ctx.beginPath();
+    ctx.moveTo(w1.x,w1.y);
+    ctx.lineTo(w2.x,w2.y);
+    ctx.lineTo(w3.x,w3.y);
+    ctx.lineTo(w4.x,w4.y);
+    ctx.closePath();
+    ctx.fill();
+  }
+}
+
+function drawGrandstand(g){
+  const leftBase=
+    projectWorld(
+      g.x-g.w*.5,
+      g.y,
+      0
+    );
+
+  const rightBase=
+    projectWorld(
+      g.x+g.w*.5,
+      g.y,
+      0
+    );
+
+  const rightTop=
+    projectWorld(
+      g.x+g.w*.5,
+      g.y,
+      g.h
+    );
+
+  const leftTop=
+    projectWorld(
+      g.x-g.w*.5,
+      g.y,
+      g.h
+    );
+
+  if(
+    !leftBase||
+    !rightBase||
+    !rightTop||
+    !leftTop
+  )return;
+
+  if(
+    Math.max(
+      leftBase.forward,
+      rightBase.forward
+    )<4
+  )return;
+
+  const body=
+    ctx.createLinearGradient(
+      leftTop.x,
+      leftTop.y,
+      rightBase.x,
+      rightBase.y
+    );
+
+  body.addColorStop(
+    0,
+    "rgba(242,244,242,.98)"
+  );
+
+  body.addColorStop(
+    .65,
+    "rgba(203,211,211,.98)"
+  );
+
+  body.addColorStop(
+    1,
+    "rgba(162,177,181,.96)"
+  );
+
+  ctx.fillStyle=body;
+
+  ctx.beginPath();
+  ctx.moveTo(leftBase.x,leftBase.y);
+  ctx.lineTo(rightBase.x,rightBase.y);
+  ctx.lineTo(rightTop.x,rightTop.y);
+  ctx.lineTo(leftTop.x,leftTop.y);
+  ctx.closePath();
+  ctx.fill();
+
+  const lowL=
+    projectWorld(
+      g.x-g.w*.48,
+      g.y,
+      g.h*.10
+    );
+
+  const lowR=
+    projectWorld(
+      g.x+g.w*.48,
+      g.y,
+      g.h*.10
+    );
+
+  const midR=
+    projectWorld(
+      g.x+g.w*.48,
+      g.y,
+      g.h*.40
+    );
+
+  const midL=
+    projectWorld(
+      g.x-g.w*.48,
+      g.y,
+      g.h*.40
+    );
+
+  if(
+    lowL&&
+    lowR&&
+    midR&&
+    midL
+  ){
+    ctx.fillStyle=
+      "rgba(91,105,108,.55)";
+
+    ctx.beginPath();
+    ctx.moveTo(lowL.x,lowL.y);
+    ctx.lineTo(lowR.x,lowR.y);
+    ctx.lineTo(midR.x,midR.y);
+    ctx.lineTo(midL.x,midL.y);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  const lb=
+    projectWorld(
+      g.x-g.w*.47,
+      g.y,
+      g.h*.55
+    );
+
+  const rb=
+    projectWorld(
+      g.x+g.w*.47,
+      g.y,
+      g.h*.55
+    );
+
+  const rt=
+    projectWorld(
+      g.x+g.w*.47,
+      g.y,
+      g.h*.77
+    );
+
+  const lt=
+    projectWorld(
+      g.x-g.w*.47,
+      g.y,
+      g.h*.77
+    );
+
+  if(
+    lb&&
+    rb&&
+    rt&&
+    lt
+  ){
+    const glass=
+      ctx.createLinearGradient(
+        lb.x,
+        lb.y,
+        rt.x,
+        rt.y
+      );
+
+    glass.addColorStop(
+      0,
+      "rgba(26,54,65,.94)"
+    );
+
+    glass.addColorStop(
+      .5,
+      "rgba(50,83,94,.90)"
+    );
+
+    glass.addColorStop(
+      1,
+      "rgba(26,50,61,.94)"
+    );
+
+    ctx.fillStyle=glass;
+
+    ctx.beginPath();
+    ctx.moveTo(lb.x,lb.y);
+    ctx.lineTo(rb.x,rb.y);
+    ctx.lineTo(rt.x,rt.y);
+    ctx.lineTo(lt.x,lt.y);
+    ctx.closePath();
+    ctx.fill();
+
+    for(
+      let i=1;
+      i<9;
+      i++
+    ){
+      const q=i/9;
+
+      const x1=
+        lerp(
+          lb.x,
+          rb.x,
+          q
+        );
+
+      const y1=
+        lerp(
+          lb.y,
+          rb.y,
+          q
+        );
+
+      const x2=
+        lerp(
+          lt.x,
+          rt.x,
+          q
+        );
+
+      const y2=
+        lerp(
+          lt.y,
+          rt.y,
+          q
+        );
+
+      ctx.strokeStyle=
+        "rgba(221,235,238,.18)";
+
+      ctx.lineWidth=1;
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        x1,
+        y1
+      );
+
+      ctx.lineTo(
+        x2,
+        y2
+      );
+
+      ctx.stroke();
+    }
+  }
+
+  for(
+    let i=1;
+    i<=g.levels;
+    i++
+  ){
+    const hh=
+      g.h*
+      (
+        i/
+        (g.levels+1)
+      );
+
+    const a=
+      projectWorld(
+        g.x-g.w*.46,
+        g.y,
+        hh
+      );
+
+    const b=
+      projectWorld(
+        g.x+g.w*.46,
+        g.y,
+        hh
+      );
+
+    if(!a||!b)continue;
+
+    ctx.strokeStyle=
+      i%2
+      ?"rgba(58,77,84,.48)"
+      :"rgba(250,250,248,.58)";
+
+    ctx.lineWidth=1;
+
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y);
+    ctx.lineTo(b.x,b.y);
+    ctx.stroke();
+
+    for(
+      let c=0;
+      c<8;
+      c++
+    ){
+      const q=
+        (c+.5)/8;
+
+      const p=
+        projectWorld(
+          lerp(
+            g.x-g.w*.43,
+            g.x+g.w*.43,
+            q
+          ),
+          g.y,
+          hh-g.h*.035
+        );
+
+      if(
+        !p||
+        p.forward<4
+      )continue;
+
+      const colors=[
+        "#d9d9d4",
+        "#314e5a",
+        "#b33c45",
+        "#315f83",
+        "#d1ad54"
+      ];
+
+      ctx.fillStyle=
+        colors[
+          (c+i*3)%
+          colors.length
+        ];
+
+      ctx.beginPath();
+
+      ctx.arc(
+        p.x,
+        p.y,
+        clamp(
+          p.scale*.018,
+          .55,
+          1.65
+        ),
+        0,
+        Math.PI*2
+      );
+
+      ctx.fill();
+    }
+  }
+
+  ctx.strokeStyle=
+    "rgba(39,86,122,.96)";
+
+  ctx.lineWidth=
+    clamp(
+      leftBase.scale*.095,
+      2,
+      7
+    );
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    leftTop.x,
+    leftTop.y
+  );
+
+  ctx.lineTo(
+    rightTop.x,
+    rightTop.y
+  );
+
+  ctx.stroke();
+}
+
+function drawBigScreen(s){
+  const supportLeft0=
+    projectWorld(
+      s.x-s.w*.30,
+      s.y,
+      0
+    );
+
+  const supportLeft1=
+    projectWorld(
+      s.x-s.w*.30,
+      s.y,
+      s.supportH
+    );
+
+  const supportRight0=
+    projectWorld(
+      s.x+s.w*.30,
+      s.y,
+      0
+    );
+
+  const supportRight1=
+    projectWorld(
+      s.x+s.w*.30,
+      s.y,
+      s.supportH
+    );
+
+  if(
+    !supportLeft0||
+    !supportLeft1||
+    !supportRight0||
+    !supportRight1
+  )return;
+
+  if(
+    Math.max(
+      supportLeft0.forward,
+      supportRight0.forward
+    )<4
+  )return;
+
+  ctx.strokeStyle=
+    "rgba(43,53,58,.96)";
+
+  ctx.lineWidth=
+    clamp(
+      supportLeft0.scale*.05,
+      1.2,
+      5
+    );
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    supportLeft0.x,
+    supportLeft0.y
+  );
+
+  ctx.lineTo(
+    supportLeft1.x,
+    supportLeft1.y
+  );
+
+  ctx.moveTo(
+    supportRight0.x,
+    supportRight0.y
+  );
+
+  ctx.lineTo(
+    supportRight1.x,
+    supportRight1.y
+  );
+
+  ctx.stroke();
+
+  const bl=
+    projectWorld(
+      s.x-s.w*.5,
+      s.y,
+      s.supportH
+    );
+
+  const br=
+    projectWorld(
+      s.x+s.w*.5,
+      s.y,
+      s.supportH
+    );
+
+  const tr=
+    projectWorld(
+      s.x+s.w*.5,
+      s.y,
+      s.supportH+s.h
+    );
+
+  const tl=
+    projectWorld(
+      s.x-s.w*.5,
+      s.y,
+      s.supportH+s.h
+    );
+
+  if(
+    !bl||
+    !br||
+    !tr||
+    !tl
+  )return;
+
+  ctx.save();
+
+  ctx.globalCompositeOperation=
+    "screen";
+
+  const glowX=
+    (
+      bl.x+
+      br.x+
+      tr.x+
+      tl.x
+    )*.25;
+
+  const glowY=
+    (
+      bl.y+
+      br.y+
+      tr.y+
+      tl.y
+    )*.25;
+
+  const glowR=
+    Math.max(
+      22,
+      Math.abs(
+        br.x-bl.x
+      )*.72
+    );
+
+  const glow=
+    ctx.createRadialGradient(
+      glowX,
+      glowY,
+      2,
+      glowX,
+      glowY,
+      glowR
+    );
+
+  glow.addColorStop(
+    0,
+    "rgba(132,218,235,.075)"
+  );
+
+  glow.addColorStop(
+    1,
+    "rgba(132,218,235,0)"
+  );
+
+  ctx.fillStyle=glow;
+
+  ctx.fillRect(
+    glowX-glowR,
+    glowY-glowR,
+    glowR*2,
+    glowR*2
+  );
+
+  ctx.restore();
+
+  ctx.fillStyle=
+    "rgba(21,28,32,.99)";
+
+  ctx.beginPath();
+  ctx.moveTo(bl.x,bl.y);
+  ctx.lineTo(br.x,br.y);
+  ctx.lineTo(tr.x,tr.y);
+  ctx.lineTo(tl.x,tl.y);
+  ctx.closePath();
+  ctx.fill();
+
+  const screenBL=
+    projectWorld(
+      s.x-s.w*.43,
+      s.y,
+      s.supportH+s.h*.08
+    );
+
+  const screenBR=
+    projectWorld(
+      s.x+s.w*.43,
+      s.y,
+      s.supportH+s.h*.08
+    );
+
+  const screenTR=
+    projectWorld(
+      s.x+s.w*.43,
+      s.y,
+      s.supportH+s.h*.91
+    );
+
+  const screenTL=
+    projectWorld(
+      s.x-s.w*.43,
+      s.y,
+      s.supportH+s.h*.91
+    );
+
+  if(
+    !screenBL||
+    !screenBR||
+    !screenTR||
+    !screenTL
+  )return;
+
+  const sg=
+    ctx.createLinearGradient(
+      screenTL.x,
+      screenTL.y,
+      screenBR.x,
+      screenBR.y
+    );
+
+  sg.addColorStop(
+    0,
+    "#0a4055"
+  );
+
+  sg.addColorStop(
+    .5,
+    "#158eb4"
+  );
+
+  sg.addColorStop(
+    1,
+    "#073346"
+  );
+
+  ctx.fillStyle=sg;
+
+  ctx.beginPath();
+  ctx.moveTo(screenBL.x,screenBL.y);
+  ctx.lineTo(screenBR.x,screenBR.y);
+  ctx.lineTo(screenTR.x,screenTR.y);
+  ctx.lineTo(screenTL.x,screenTL.y);
+  ctx.closePath();
+  ctx.fill();
+
+  const cx=
+    (
+      screenTL.x+
+      screenBR.x
+    )*.5;
+
+  const cy=
+    (
+      screenTL.y+
+      screenBR.y
+    )*.5;
+
+  const sw=
+    Math.abs(
+      screenBR.x-
+      screenBL.x
+    );
+
+  const sh=
+    Math.abs(
+      screenBL.y-
+      screenTL.y
+    );
+
+  ctx.strokeStyle=
+    "rgba(235,252,255,.83)";
+
+  ctx.lineWidth=1.4;
+
+  ctx.beginPath();
+
+  ctx.ellipse(
+    cx,
+    cy,
+    sw*.27,
+    sh*.18,
+    0,
+    0,
+    Math.PI*2
+  );
+
+  ctx.stroke();
+
+  for(
+    let i=0;
+    i<3;
+    i++
+  ){
+    const a=
+      clock*
+      (.55+i*.035)+
+      i*2.0;
+
+    const px=
+      cx+
+      Math.cos(a)*
+      sw*.27;
+
+    const py=
+      cy+
+      Math.sin(a)*
+      sh*.18;
+
+    ctx.fillStyle=
+      i===0
+      ?"#fff"
+      :i===1
+      ?"#e62a3a"
+      :"#f2d34b";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      px,
+      py,
+      clamp(
+        sw*.014,
+        1.2,
+        3
+      ),
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+  }
+
+  ctx.fillStyle=
+    "rgba(3,25,35,.72)";
+
+  ctx.fillRect(
+    Math.min(
+      screenTL.x,
+      screenBL.x
+    ),
+    Math.min(
+      screenTL.y,
+      screenTR.y
+    ),
+    sw,
+    Math.max(
+      3,
+      sh*.16
+    )
+  );
+
+  ctx.fillStyle=
+    "rgba(255,255,255,.9)";
+
+  ctx.font=
+    `900 ${clamp(sw*.045,7,15)}px sans-serif`;
+
+  ctx.textAlign="center";
+  ctx.textBaseline="middle";
+
+  ctx.fillText(
+    "RACE VISION",
+    cx,
+    Math.min(
+      screenTL.y,
+      screenTR.y
+    )+
+    Math.max(
+      3,
+      sh*.08
+    )
+  );
+}
+
+function drawControlTower(t){
+  const b1=
+    projectWorld(
+      t.x-t.w*.5,
+      t.y,
+      0
+    );
+
+  const b2=
+    projectWorld(
+      t.x+t.w*.5,
+      t.y,
+      0
+    );
+
+  const p2=
+    projectWorld(
+      t.x+t.w*.5,
+      t.y,
+      t.h
+    );
+
+  const p1=
+    projectWorld(
+      t.x-t.w*.5,
+      t.y,
+      t.h
+    );
+
+  if(
+    !b1||
+    !b2||
+    !p1||
+    !p2
+  )return;
+
+  if(
+    Math.max(
+      b1.forward,
+      b2.forward
+    )<4
+  )return;
+
+  ctx.fillStyle=
+    "rgba(230,236,238,.97)";
+
+  ctx.beginPath();
+  ctx.moveTo(b1.x,b1.y);
+  ctx.lineTo(b2.x,b2.y);
+  ctx.lineTo(p2.x,p2.y);
+  ctx.lineTo(p1.x,p1.y);
+  ctx.closePath();
+  ctx.fill();
+
+  const w1=
+    projectWorld(
+      t.x-t.w*.42,
+      t.y,
+      t.h*.58
+    );
+
+  const w2=
+    projectWorld(
+      t.x+t.w*.42,
+      t.y,
+      t.h*.58
+    );
+
+  const w3=
+    projectWorld(
+      t.x+t.w*.42,
+      t.y,
+      t.h*.79
+    );
+
+  const w4=
+    projectWorld(
+      t.x-t.w*.42,
+      t.y,
+      t.h*.79
+    );
+
+  if(
+    w1&&
+    w2&&
+    w3&&
+    w4
+  ){
+    ctx.fillStyle=
+      "rgba(38,69,82,.88)";
+
+    ctx.beginPath();
+    ctx.moveTo(w1.x,w1.y);
+    ctx.lineTo(w2.x,w2.y);
+    ctx.lineTo(w3.x,w3.y);
+    ctx.lineTo(w4.x,w4.y);
+    ctx.closePath();
+    ctx.fill();
+  }
+}
+
+function drawFlag(f,index){
+  const base=
+    projectWorld(
+      f.x,
+      f.y,
+      0
+    );
+
+  const top=
+    projectWorld(
+      f.x,
+      f.y,
+      f.h
+    );
+
+  if(
+    !base||
+    !top||
+    base.forward<3
+  )return;
+
+  ctx.strokeStyle=
+    "rgba(40,52,58,.82)";
+
+  ctx.lineWidth=1.2;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    base.x,
+    base.y
+  );
+
+  ctx.lineTo(
+    top.x,
+    top.y
+  );
+
+  ctx.stroke();
+
+  const dir=
+    index%2===0
+    ?1
+    :-1;
+
+  const flagW=
+    clamp(
+      base.scale*.18,
+      3,
+      11
+    );
+
+  const flagH=
+    flagW*.55;
+
+  ctx.fillStyle=
+    index%3===0
+    ?"#d9233e"
+    :index%3===1
+    ?"#f4f4f4"
+    :"#1d6a9a";
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    top.x,
+    top.y
+  );
+
+  ctx.lineTo(
+    top.x+
+    dir*flagW,
+    top.y+
+    flagH*.25
+  );
+
+  ctx.lineTo(
+    top.x,
+    top.y+
+    flagH
+  );
+
+  ctx.closePath();
+  ctx.fill();
+}
+
+function drawTreeCluster(x,y,w,h,seed){
+  const base=
+    projectWorld(
+      x,
+      y,
+      0
+    );
+
+  if(
+    !base||
+    base.forward<4
+  )return;
+
+  for(
+    let i=0;
+    i<7;
+    i++
+  ){
+    const rx=
+      (
+        (
+          i*17+
+          seed*13
+        )%11
+      )/10-
+      .5;
+
+    const rh=
+      (
+        (
+          i*29+
+          seed*7
+        )%9
+      )/8;
+
+    const p=
+      projectWorld(
+        x+
+        rx*w*.65,
+        y,
+        h*
+        (.55+.40*rh)
+      );
+
+    if(!p)continue;
+
+    const radius=
+      clamp(
+        base.scale*
+        w*
+        (
+          .055+
+          .015*
+          (i%3)
+        ),
+        1.2,
+        13
+      );
+
+    ctx.fillStyle=
+      i%3===0
+      ?"rgba(36,81,54,.88)"
+      :i%3===1
+      ?"rgba(48,94,62,.88)"
+      :"rgba(63,107,69,.84)";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      p.x,
+      p.y,
+      radius,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+  }
+}
+
+function drawFloatingBoundary(y,x1,x2){
+  const count=32;
+
+  for(
+    let i=0;
+    i<count;
+    i++
+  ){
+    const q=
+      i/(count-1);
+
+    const x=
+      lerp(
+        x1,
+        x2,
+        q
+      );
+
+    const p=
+      projectWorld(
+        x,
+        y,
+        .08
+      );
+
+    if(
+      !p||
+      p.forward<3
+    )continue;
+
+    const w=
+      clamp(
+        p.scale*.26,
+        2,
+        10
+      );
+
+    const hh=
+      clamp(
+        p.scale*.055,
+        .8,
+        3
+      );
+
+    ctx.fillStyle=
+      i%2===0
+      ?"rgba(239,241,235,.95)"
+      :"rgba(205,69,66,.92)";
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+      p.x,
+      p.y,
+      w,
+      hh,
+      0,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+  }
+}
+
+function drawVenueHaze(){
+  const h=
+    sceneHorizon();
+
+  const grad=
+    ctx.createLinearGradient(
+      0,
+      h-55,
+      0,
+      h+22
+    );
+
+  grad.addColorStop(
+    0,
+    "rgba(225,240,242,0)"
+  );
+
+  grad.addColorStop(
+    .58,
+    "rgba(229,242,243,.095)"
+  );
+
+  grad.addColorStop(
+    1,
+    "rgba(229,242,243,0)"
+  );
+
+  ctx.fillStyle=grad;
+
+  ctx.fillRect(
+    0,
+    h-60,
+    W,
+    90
+  );
+}
+
+function drawWorldScenery(){
+  const trees=[
+    {x:65,y:20,w:18,h:9},
+    {x:92,y:18,w:22,h:11},
+    {x:135,y:17,w:24,h:12},
+    {x:185,y:16,w:26,h:13},
+    {x:245,y:15,w:26,h:13},
+    {x:318,y:16,w:28,h:14},
+    {x:382,y:18,w:25,h:12},
+    {x:438,y:20,w:20,h:10}
+  ];
+
+  trees.forEach(
+    (t,i)=>
+      drawTreeCluster(
+        t.x,
+        t.y,
+        t.w,
+        t.h,
+        i
+      )
+  );
+
+  drawFloatingBoundary(
+    35,
+    55,
+    470
+  );
+
+  for(
+    const b of
+    VENUE.farBuildings
+  ){
+    drawWorldBuilding(b);
+  }
+
+  for(
+    const g of
+    VENUE.gantries
+  ){
+    drawWorldGantry(g);
+  }
+
+  drawPitHouse(
+    VENUE.pitHouse
+  );
+
+  for(
+    const g of
+    VENUE.grandstands
+  ){
+    drawGrandstand(g);
+  }
+
+  drawControlTower(
+    VENUE.controlTower
+  );
+
+  drawBigScreen(
+    VENUE.bigScreen
+  );
+
+  for(
+    const p of
+    VENUE.lightTowers
+  ){
+    drawLightTower(p);
+  }
+
+  for(
+    const p of
+    VENUE.shoreBuoys
+  ){
+    drawSmallBuoy(p);
+  }
+
+  VENUE.flags.forEach(
+    (f,i)=>
+      drawFlag(f,i)
+  );
+}
+
+function drawWorldStrip(
+  points,
+  height,
+  color,
+  width
+){
+  let started=false;
 
   ctx.beginPath();
 
   for(
-    const p
-    of coursePoints()
+    const q of points
   ){
-    const s=
+    const p=
       projectWorld(
-        p.x,
-        p.y,
-        0
+        q.x,
+        q.y,
+        height
       );
 
     if(
-      !s||
-      s.forward<1.5
+      !p||
+      p.forward<1.5
     ){
-      active=false;
+      started=false;
       continue;
     }
 
-    if(
-      s.x<-W*.7||
-      s.x>W*1.7||
-      s.y<-H*.4||
-      s.y>H*1.5
-    ){
-      active=false;
-      continue;
-    }
-
-    if(!active){
+    if(!started){
       ctx.moveTo(
-        s.x,
-        s.y
+        p.x,
+        p.y
       );
 
-      active=true;
+      started=true;
     }else{
       ctx.lineTo(
-        s.x,
-        s.y
+        p.x,
+        p.y
       );
     }
   }
 
+  ctx.strokeStyle=color;
+  ctx.lineWidth=width;
   ctx.stroke();
+}
+
+function drawVenueSeawalls(){
+  const south=[];
+  const north=[];
+  const rightBend=[];
+  const leftBend=[];
+
+  for(
+    let i=0;
+    i<=36;
+    i++
+  ){
+    const q=i/36;
+
+    south.push({
+      x:
+        lerp(
+          45,
+          492,
+          q
+        ),
+
+      y:
+        169+
+        Math.sin(
+          q*Math.PI
+        )*3
+    });
+
+    north.push({
+      x:
+        lerp(
+          45,
+          492,
+          q
+        ),
+
+      y:
+        22-
+        Math.sin(
+          q*Math.PI
+        )*3
+    });
+  }
+
+  for(
+    let i=0;
+    i<=24;
+    i++
+  ){
+    const q=i/24;
+
+    const a=
+      -Math.PI/2+
+      Math.PI*q;
+
+    rightBend.push({
+      x:
+        486+
+        24*
+        Math.cos(a),
+
+      y:
+        95+
+        74*
+        Math.sin(a)
+    });
+  }
+
+  for(
+    let i=0;
+    i<=24;
+    i++
+  ){
+    const q=i/24;
+
+    const a=
+      Math.PI/2+
+      Math.PI*q;
+
+    leftBend.push({
+      x:
+        48+
+        19*
+        Math.cos(a),
+
+      y:
+        95+
+        73*
+        Math.sin(a)
+    });
+  }
+
+  drawWorldStrip(
+    south,
+    .45,
+    "rgba(215,222,225,.90)",
+    4
+  );
+
+  drawWorldStrip(
+    south,
+    1.25,
+    "rgba(24,87,145,.96)",
+    2.2
+  );
+
+  drawWorldStrip(
+    north,
+    .40,
+    "rgba(195,205,210,.78)",
+    3
+  );
+
+  drawWorldStrip(
+    north,
+    1.05,
+    "rgba(37,89,119,.78)",
+    1.8
+  );
+
+  drawWorldStrip(
+    rightBend,
+    .40,
+    "rgba(205,214,218,.76)",
+    3
+  );
+
+  drawWorldStrip(
+    leftBend,
+    .40,
+    "rgba(205,214,218,.76)",
+    3
+  );
+}
+
+function drawTargetMarkIndicator(){
+  const m=
+    currentCameraTargetMark();
+
+  if(!m)return;
+
+  const p=
+    projectWorld(
+      m.x,
+      m.y,
+      .45
+    );
+
+  if(!p)return;
+
+  const margin=24;
+
+  if(
+    p.x>=margin &&
+    p.x<=W-margin &&
+    p.y>=margin &&
+    p.y<=H-margin
+  ){
+    return;
+  }
+
+  const cx=
+    clamp(
+      p.x,
+      margin,
+      W-margin
+    );
+
+  const cy=
+    clamp(
+      p.y,
+      H*.22,
+      H*.78
+    );
+
+  ctx.save();
+
+  ctx.translate(
+    cx,
+    cy
+  );
+
+  const dir=
+    p.x<W*.5
+    ?-1
+    :1;
+
+  ctx.fillStyle=
+    "rgba(255,236,90,.85)";
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    dir*8,
+    0
+  );
+
+  ctx.lineTo(
+    -dir*5,
+    -6
+  );
+
+  ctx.lineTo(
+    -dir*5,
+    6
+  );
+
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.font=
+    "900 10px sans-serif";
+
+  ctx.textAlign=
+    dir<0
+    ?"left"
+    :"right";
+
+  ctx.textBaseline=
+    "middle";
+
+  ctx.fillStyle=
+    "rgba(255,255,255,.9)";
+
+  ctx.fillText(
+    m.label,
+    -dir*9,
+    0
+  );
 
   ctx.restore();
+}
 
+function drawCourse(){
   marks.forEach(
     drawTurnMark
   );
@@ -1249,21 +3718,16 @@ function drawTurnMark(m){
     !base||
     !top||
     base.forward<1.2
-  ){
-    return;
-  }
+  )return;
 
   if(
     base.x<-140||
     base.x>W+140||
     base.y<-80||
     top.y>H+100
-  ){
-    return;
-  }
+  )return;
 
-  const physicalWidth=
-    1.10;
+  const physicalWidth=1.18;
 
   const halfPx=
     clamp(
@@ -1277,32 +3741,23 @@ function drawTurnMark(m){
   const heightPx=
     clamp(
       base.y-top.y,
-      5,
-      100
+      6,
+      118
     );
 
-  const bx=
-    base.x;
-
-  const by=
-    base.y;
-
-  const ty=
-    by-heightPx;
+  const bx=base.x;
+  const by=base.y;
+  const ty=by-heightPx;
 
   ctx.save();
 
-  ctx.globalAlpha=
-    .22;
-
-  ctx.fillStyle=
-    "#08384b";
+  ctx.globalAlpha=.22;
+  ctx.fillStyle="#08384b";
 
   ctx.beginPath();
 
   ctx.ellipse(
-    bx+
-    halfPx*.12,
+    bx+halfPx*.12,
     by+2,
     halfPx*1.18,
     Math.max(
@@ -1315,7 +3770,6 @@ function drawTurnMark(m){
   );
 
   ctx.fill();
-
   ctx.restore();
 
   const widths=[
@@ -1343,17 +3797,11 @@ function drawTurnMark(m){
     i<3;
     i++
   ){
-    const y0=
-      ys[i];
+    const y0=ys[i];
+    const y1=ys[i+1];
 
-    const y1=
-      ys[i+1];
-
-    const w0=
-      widths[i];
-
-    const w1=
-      widths[i+1];
+    const w0=widths[i];
+    const w1=widths[i+1];
 
     const grd=
       ctx.createLinearGradient(
@@ -1397,8 +3845,7 @@ function drawTurnMark(m){
       );
     }
 
-    ctx.fillStyle=
-      grd;
+    ctx.fillStyle=grd;
 
     ctx.beginPath();
 
@@ -1423,7 +3870,6 @@ function drawTurnMark(m){
     );
 
     ctx.closePath();
-
     ctx.fill();
 
     ctx.strokeStyle=
@@ -1468,21 +3914,15 @@ function drawSpray(){
       Math.hypot(
         boat.vx,
         boat.vy
-      )/
-      22.22,
+      )/22.22,
       0,
       1
     );
 
-  if(sr<.08){
-    return;
-  }
+  if(sr<.08)return;
 
-  const cx=
-    W*.5;
-
-  const by=
-    H*.91;
+  const cx=W*.5;
+  const by=H*.91;
 
   ctx.save();
 
@@ -1490,8 +3930,7 @@ function drawSpray(){
     "screen";
 
   for(
-    const side
-    of[-1,1]
+    const side of [-1,1]
   ){
     ctx.beginPath();
 
@@ -1528,7 +3967,7 @@ function drawSpray(){
 
   for(
     let i=0;
-    i<26;
+    i<18;
     i++
   ){
     const side=
@@ -1539,11 +3978,9 @@ function drawSpray(){
     const phase=
       (
         clock*
-        (1.7+sr*2.8)
-        +
+        (1.7+sr*2.8)+
         i*.43
-      )%
-      1;
+      )%1;
 
     const px=
       cx+
@@ -1557,13 +3994,11 @@ function drawSpray(){
     const py=
       H*.92-
       phase*
-      (12+sr*35)
-      +
+      (12+sr*35)+
       Math.sin(
         i*2.3+
         clock*8
-      )*
-      3;
+      )*3;
 
     const r=
       1+
@@ -1591,8 +4026,7 @@ function drawBoatCockpit(){
       Math.hypot(
         boat.vx,
         boat.vy
-      )/
-      22.22,
+      )/22.22,
       0,
       1
     );
@@ -1609,237 +4043,399 @@ function drawBoatCockpit(){
       )
     );
 
-  const steerLean=
+  const lateral=
     clamp(
-      relative*.48,
-      -.11,
-      .11
+      relative*
+      W*.12,
+      -W*.045,
+      W*.045
+    );
+
+  const turnTilt=
+    clamp(
+      relative*.30,
+      -.075,
+      .075
     );
 
   ctx.save();
 
   ctx.translate(
     W*.5+
-    camera.shakeX*.30,
-    H*.935+
-    camera.bob*.18
+    lateral+
+    camera.shakeX*.18,
+    H*.985+
+    camera.bob*.10
   );
 
   ctx.rotate(
-    camera.roll*.45+
-    steerLean
+    camera.roll*.26+
+    turnTilt
   );
 
   const S=
     clamp(
       Math.min(
-        W/1100,
-        H/500
+        W/1110,
+        H/525
       ),
-      .68,
-      1.18
+      .66,
+      1.12
     );
 
-  ctx.scale(
-    S,
-    S
-  );
-
-  ctx.fillStyle=
-    "#151e23";
-
-  ctx.beginPath();
-
-  ctx.moveTo(
-    0,
-    -184
-  );
-
-  ctx.lineTo(
-    -112,
-    -18
-  );
-
-  ctx.lineTo(
-    -245,
-    88
-  );
-
-  ctx.lineTo(
-    245,
-    88
-  );
-
-  ctx.lineTo(
-    112,
-    -18
-  );
-
-  ctx.closePath();
-
-  ctx.fill();
+  ctx.scale(S,S);
 
   const hull=
     ctx.createLinearGradient(
-      -210,
-      -180,
-      180,
-      95
+      0,
+      -245,
+      0,
+      100
     );
 
   hull.addColorStop(
     0,
-    "#ffffff"
+    "#fcfdfe"
   );
 
   hull.addColorStop(
-    .5,
-    "#edf2f4"
+    .38,
+    "#f3f6f7"
+  );
+
+  hull.addColorStop(
+    .72,
+    "#dfe6e9"
   );
 
   hull.addColorStop(
     1,
-    "#aeb9be"
+    "#bdc8cd"
   );
 
-  ctx.fillStyle=
-    hull;
+  ctx.fillStyle=hull;
 
   ctx.beginPath();
 
   ctx.moveTo(
     0,
-    -205
+    -257
   );
 
   ctx.bezierCurveTo(
-    -35,
-    -166,
-    -68,
-    -102,
-    -88,
-    -44
-  );
-
-  ctx.lineTo(
-    -205,
-    60
-  );
-
-  ctx.lineTo(
-    -225,
-    88
-  );
-
-  ctx.lineTo(
-    225,
-    88
-  );
-
-  ctx.lineTo(
-    205,
-    60
-  );
-
-  ctx.lineTo(
-    88,
-    -44
+    36,
+    -231,
+    61,
+    -199,
+    78,
+    -163
   );
 
   ctx.bezierCurveTo(
-    68,
-    -102,
-    35,
-    -166,
+    107,
+    -142,
+    169,
+    -116,
+    232,
+    -75
+  );
+
+  ctx.bezierCurveTo(
+    282,
+    -42,
+    325,
+    12,
+    366,
+    92
+  );
+
+  ctx.lineTo(
+    -366,
+    92
+  );
+
+  ctx.bezierCurveTo(
+    -325,
+    12,
+    -282,
+    -42,
+    -232,
+    -75
+  );
+
+  ctx.bezierCurveTo(
+    -169,
+    -116,
+    -107,
+    -142,
+    -78,
+    -163
+  );
+
+  ctx.bezierCurveTo(
+    -61,
+    -199,
+    -36,
+    -231,
     0,
-    -205
+    -257
   );
 
   ctx.closePath();
-
   ctx.fill();
 
+  ctx.strokeStyle=
+    "rgba(76,92,100,.34)";
+
+  ctx.lineWidth=2.2;
+  ctx.stroke();
+
+  const sidePanel=
+    ctx.createLinearGradient(
+      0,
+      -130,
+      0,
+      85
+    );
+
+  sidePanel.addColorStop(
+    0,
+    "#4e5b63"
+  );
+
+  sidePanel.addColorStop(
+    .58,
+    "#303b42"
+  );
+
+  sidePanel.addColorStop(
+    1,
+    "#202a30"
+  );
+
   ctx.fillStyle=
-    "#d9233e";
+    sidePanel;
 
   ctx.beginPath();
 
   ctx.moveTo(
-    -9,
-    -197
+    -80,
+    -158
+  );
+
+  ctx.bezierCurveTo(
+    -120,
+    -138,
+    -203,
+    -101,
+    -278,
+    -45
+  );
+
+  ctx.lineTo(
+    -345,
+    88
+  );
+
+  ctx.lineTo(
+    -214,
+    88
+  );
+
+  ctx.bezierCurveTo(
+    -173,
+    26,
+    -122,
+    -43,
+    -66,
+    -100
+  );
+
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    80,
+    -158
+  );
+
+  ctx.bezierCurveTo(
+    120,
+    -138,
+    203,
+    -101,
+    278,
+    -45
+  );
+
+  ctx.lineTo(
+    345,
+    88
+  );
+
+  ctx.lineTo(
+    214,
+    88
+  );
+
+  ctx.bezierCurveTo(
+    173,
+    26,
+    122,
+    -43,
+    66,
+    -100
+  );
+
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle="#d92746";
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    -16,
+    -241
   );
 
   ctx.lineTo(
     -43,
-    -78
+    -185
+  );
+
+  ctx.bezierCurveTo(
+    -61,
+    -149,
+    -90,
+    -111,
+    -123,
+    -73
   );
 
   ctx.lineTo(
-    -150,
-    45
+    -81,
+    -63
   );
 
-  ctx.lineTo(
-    -94,
-    45
-  );
-
-  ctx.lineTo(
-    0,
-    -116
+  ctx.bezierCurveTo(
+    -58,
+    -108,
+    -32,
+    -162,
+    -6,
+    -222
   );
 
   ctx.closePath();
-
   ctx.fill();
 
   ctx.beginPath();
 
   ctx.moveTo(
-    9,
-    -197
+    16,
+    -241
   );
 
   ctx.lineTo(
     43,
-    -78
+    -185
+  );
+
+  ctx.bezierCurveTo(
+    61,
+    -149,
+    90,
+    -111,
+    123,
+    -73
   );
 
   ctx.lineTo(
-    150,
-    45
+    81,
+    -63
+  );
+
+  ctx.bezierCurveTo(
+    58,
+    -108,
+    32,
+    -162,
+    6,
+    -222
+  );
+
+  ctx.closePath();
+  ctx.fill();
+
+  const ridge=
+    ctx.createLinearGradient(
+      0,
+      -250,
+      0,
+      -55
+    );
+
+  ridge.addColorStop(
+    0,
+    "rgba(255,255,255,.96)"
+  );
+
+  ridge.addColorStop(
+    1,
+    "rgba(255,255,255,.24)"
+  );
+
+  ctx.fillStyle=ridge;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    0,
+    -250
   );
 
   ctx.lineTo(
-    94,
-    45
+    15,
+    -88
   );
 
   ctx.lineTo(
     0,
-    -116
+    -58
+  );
+
+  ctx.lineTo(
+    -15,
+    -88
   );
 
   ctx.closePath();
-
   ctx.fill();
 
   const cockpit=
     ctx.createLinearGradient(
       0,
-      -60,
+      -43,
       0,
-      70
+      78
     );
 
   cockpit.addColorStop(
     0,
-    "#172228"
+    "#10181d"
+  );
+
+  cockpit.addColorStop(
+    .55,
+    "#1e292f"
   );
 
   cockpit.addColorStop(
     1,
-    "#2c393f"
+    "#11191d"
   );
 
   ctx.fillStyle=
@@ -1848,209 +4444,212 @@ function drawBoatCockpit(){
   ctx.beginPath();
 
   ctx.moveTo(
-    -42,
-    58
+    -55,
+    78
   );
 
   ctx.lineTo(
-    -24,
-    -57
+    -43,
+    -21
   );
 
   ctx.quadraticCurveTo(
     0,
-    -77,
-    24,
-    -57
+    -56,
+    43,
+    -21
   );
 
   ctx.lineTo(
-    42,
-    58
+    55,
+    78
   );
 
   ctx.closePath();
-
   ctx.fill();
 
   ctx.strokeStyle=
-    "#11181d";
+    "rgba(231,239,242,.78)";
 
-  ctx.lineWidth=
-    7;
+  ctx.lineWidth=4;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    -49,
+    -18
+  );
+
+  ctx.quadraticCurveTo(
+    0,
+    -58,
+    49,
+    -18
+  );
+
+  ctx.stroke();
+
+  ctx.fillStyle=
+    "rgba(100,174,204,.16)";
+
+  ctx.strokeStyle=
+    "rgba(214,242,251,.34)";
+
+  ctx.lineWidth=1.5;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    -38,
+    -18
+  );
+
+  ctx.quadraticCurveTo(
+    0,
+    -42,
+    38,
+    -18
+  );
+
+  ctx.lineTo(
+    31,
+    -2
+  );
+
+  ctx.quadraticCurveTo(
+    0,
+    -20,
+    -31,
+    -2
+  );
+
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.strokeStyle=
+    "#11191d";
+
+  ctx.lineWidth=6;
+
+  const wheelY=24;
+  const wheelR=36;
 
   ctx.beginPath();
 
   ctx.arc(
     0,
-    16,
-    37,
+    wheelY,
+    wheelR,
     0,
     Math.PI*2
   );
 
   ctx.stroke();
 
-  ctx.lineWidth=
-    4;
+  ctx.lineWidth=3.4;
 
   for(
     let a=0;
     a<Math.PI*2;
-    a+=Math.PI/3
+    a+=Math.PI*2/3
   ){
     ctx.beginPath();
 
     ctx.moveTo(
       0,
-      16
+      wheelY
     );
 
     ctx.lineTo(
-      Math.cos(a)*31,
-      16+
-      Math.sin(a)*31
+      Math.cos(a)*
+      wheelR*.80,
+      wheelY+
+      Math.sin(a)*
+      wheelR*.80
     );
 
     ctx.stroke();
   }
 
-  const motor=
-    ctx.createLinearGradient(
-      85,
-      -35,
-      155,
-      65
-    );
+  ctx.fillStyle=
+    "#20292e";
 
-  motor.addColorStop(
+  ctx.beginPath();
+
+  ctx.arc(
     0,
-    "#475158"
-  );
-
-  motor.addColorStop(
-    .55,
-    "#242d32"
-  );
-
-  motor.addColorStop(
-    1,
-    "#11181c"
-  );
-
-  ctx.fillStyle=
-    motor;
-
-  ctx.beginPath();
-
-  ctx.roundRect(
-    86,
-    -27,
-    76,
-    94,
-    20
+    wheelY,
+    8,
+    0,
+    Math.PI*2
   );
 
   ctx.fill();
 
   ctx.fillStyle=
-    "rgba(255,255,255,.12)";
+    "#252f34";
 
   ctx.beginPath();
 
   ctx.roundRect(
-    96,
-    -18,
-    21,
-    73,
-    10
+    -15,
+    40,
+    30,
+    53,
+    9
   );
 
   ctx.fill();
+
+  ctx.save();
+
+  ctx.globalCompositeOperation=
+    "screen";
 
   ctx.strokeStyle=
-    "rgba(54,70,78,.34)";
+    "rgba(255,255,255,.30)";
 
-  ctx.lineWidth=
-    2;
+  ctx.lineWidth=1.5;
 
   ctx.beginPath();
 
   ctx.moveTo(
-    -85,
-    6
+    -4,
+    -239
   );
 
-  ctx.lineTo(
-    -193,
-    67
+  ctx.bezierCurveTo(
+    -38,
+    -202,
+    -83,
+    -150,
+    -143,
+    -113
   );
+
+  ctx.stroke();
+
+  ctx.beginPath();
 
   ctx.moveTo(
-    85,
-    6
+    4,
+    -239
   );
 
-  ctx.lineTo(
-    193,
-    67
+  ctx.bezierCurveTo(
+    38,
+    -202,
+    83,
+    -150,
+    143,
+    -113
   );
 
   ctx.stroke();
 
   ctx.restore();
-
-  if(sr>.10){
-    ctx.save();
-
-    ctx.globalAlpha=
-      .08+
-      sr*.24;
-
-    ctx.fillStyle=
-      "#fff";
-
-    for(
-      let i=0;
-      i<23;
-      i++
-    ){
-      const px=
-        W*.5+
-        Math.sin(
-          i*17.3
-        )*
-        W*.31;
-
-      const py=
-        H*.94+
-        (
-          (i*29)%
-          Math.max(
-            12,
-            H*.06
-          )
-        );
-
-      const r=
-        1.1+
-        (i%4)*.7;
-
-      ctx.beginPath();
-
-      ctx.arc(
-        px,
-        py,
-        r,
-        0,
-        Math.PI*2
-      );
-
-      ctx.fill();
-    }
-
-    ctx.restore();
-  }
+  ctx.restore();
 }
 
 function drawDistancePosts(){
@@ -2068,8 +4667,7 @@ function drawDistancePosts(){
   ];
 
   for(
-    const p
-    of posts
+    const p of posts
   ){
     const btm=
       projectWorld(
@@ -2089,16 +4687,12 @@ function drawDistancePosts(){
       !btm||
       !top||
       btm.forward<5
-    ){
-      return;
-    }
+    )return;
 
     if(
       btm.x<-30||
       btm.x>W+30
-    ){
-      continue;
-    }
+    )continue;
 
     ctx.strokeStyle=
       "rgba(35,47,52,.75)";
@@ -2129,8 +4723,7 @@ function drawDistancePosts(){
     ctx.font=
       `700 ${clamp(11+btm.scale*.06,10,18)}px sans-serif`;
 
-    ctx.textAlign=
-      "center";
+    ctx.textAlign="center";
 
     ctx.fillText(
       p.label+"m",
@@ -2140,37 +4733,405 @@ function drawDistancePosts(){
   }
 }
 
+function drawMiniMap(){
+  const mw=132;
+  const mh=112;
+
+  const mx=
+    W-mw-10;
+
+  const my=10;
+  const pad=9;
+
+  const minX=45;
+  const maxX=475;
+  const minY=35;
+  const maxY=155;
+
+  const mapX=
+    wx=>
+      mx+
+      pad+
+      (
+        (wx-minX)/
+        (maxX-minX)
+      )*
+      (mw-pad*2);
+
+  const mapY=
+    wy=>
+      my+
+      pad+
+      (
+        (wy-minY)/
+        (maxY-minY)
+      )*
+      (mh-pad*2);
+
+  ctx.save();
+
+  ctx.fillStyle=
+    "rgba(5,42,60,.74)";
+
+  ctx.fillRect(
+    mx,
+    my,
+    mw,
+    mh
+  );
+
+  ctx.strokeStyle=
+    "rgba(255,255,255,.92)";
+
+  ctx.lineWidth=2;
+
+  ctx.strokeRect(
+    mx,
+    my,
+    mw,
+    mh
+  );
+
+  ctx.strokeStyle=
+    "rgba(112,211,235,.13)";
+
+  ctx.lineWidth=1;
+
+  for(
+    let i=1;
+    i<6;
+    i++
+  ){
+    const yy=
+      my+
+      (mh/6)*i;
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+      mx+3,
+      yy
+    );
+
+    ctx.lineTo(
+      mx+mw-3,
+      yy
+    );
+
+    ctx.stroke();
+  }
+
+  const pts=
+    coursePoints();
+
+  ctx.beginPath();
+
+  pts.forEach(
+    (p,i)=>{
+      const px=
+        mapX(p.x);
+
+      const py=
+        mapY(p.y);
+
+      if(i===0){
+        ctx.moveTo(px,py);
+      }else{
+        ctx.lineTo(px,py);
+      }
+    }
+  );
+
+  ctx.closePath();
+
+  ctx.strokeStyle=
+    "rgba(232,251,255,.70)";
+
+  ctx.lineWidth=2;
+  ctx.stroke();
+
+  ctx.strokeStyle=
+    "#ffffff";
+
+  ctx.lineWidth=2;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    mapX(RACE.startX),
+    mapY(
+      COURSE.bottomY-
+      RACE.startHalfWidth*.58
+    )
+  );
+
+  ctx.lineTo(
+    mapX(RACE.startX),
+    mapY(
+      COURSE.bottomY+
+      RACE.startHalfWidth*.58
+    )
+  );
+
+  ctx.stroke();
+
+  for(
+    const m of marks
+  ){
+    const px=mapX(m.x);
+    const py=mapY(m.y);
+
+    ctx.fillStyle="#ffffff";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      px,
+      py,
+      4.2,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.fillStyle="#e52a38";
+
+    ctx.beginPath();
+
+    ctx.arc(
+      px,
+      py,
+      2.5,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+    ctx.font=
+      "900 9px sans-serif";
+
+    ctx.fillStyle="#ffffff";
+    ctx.textAlign="center";
+
+    ctx.fillText(
+      m.label,
+      px,
+      py-7
+    );
+  }
+
+  const bx=
+    mapX(boat.x);
+
+  const by=
+    mapY(boat.y);
+
+  ctx.save();
+
+  ctx.translate(
+    bx,
+    by
+  );
+
+  ctx.rotate(
+    boat.angle
+  );
+
+  ctx.shadowColor=
+    "#73f4ff";
+
+  ctx.shadowBlur=7;
+  ctx.fillStyle="#73f4ff";
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    8,
+    0
+  );
+
+  ctx.lineTo(
+    -5,
+    -4.5
+  );
+
+  ctx.lineTo(
+    -3,
+    0
+  );
+
+  ctx.lineTo(
+    -5,
+    4.5
+  );
+
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.restore();
+
+  ctx.shadowBlur=0;
+
+  ctx.font=
+    "900 9px sans-serif";
+
+  ctx.textAlign="left";
+
+  ctx.fillStyle=
+    "rgba(255,255,255,.92)";
+
+  ctx.fillText(
+    "YOU",
+    mx+6,
+    my+12
+  );
+
+  ctx.restore();
+}
+
+function drawLensSpray(){
+  const sr=
+    clamp(
+      Math.hypot(
+        boat.vx,
+        boat.vy
+      )/22.22,
+      0,
+      1
+    );
+
+  const turn=
+    Math.abs(steering);
+
+  const amount=
+    clamp(
+      (sr-.28)*.65+
+      turn*sr*.95,
+      0,
+      1
+    );
+
+  if(amount<.08)return;
+
+  ctx.save();
+
+  ctx.globalCompositeOperation=
+    "screen";
+
+  for(
+    let i=0;
+    i<18;
+    i++
+  ){
+    const side=
+      i%2===0
+      ?-1
+      :1;
+
+    const x=
+      W*.5+
+      side*
+      (
+        W*.17+
+        (
+          (i*37)%
+          Math.max(
+            50,
+            W*.28
+          )
+        )
+      );
+
+    const y=
+      H*.58+
+      (
+        (
+          i*61+
+          clock*105
+        )%
+        Math.max(
+          65,
+          H*.35
+        )
+      );
+
+    const rx=
+      .8+
+      (i%5)*.45;
+
+    const alpha=
+      .008+
+      amount*.05*
+      (
+        (i%4)+1
+      )/4;
+
+    ctx.fillStyle=
+      `rgba(238,251,252,${alpha})`;
+
+    ctx.beginPath();
+
+    ctx.ellipse(
+      x,
+      y,
+      rx*1.9,
+      rx,
+      0,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
 function render(){
   drawSky();
   drawStadium();
   drawWater();
+
+  drawVenueHaze();
+  drawVenueSeawalls();
+  drawWorldScenery();
+
   drawDistancePosts();
   drawCourse();
+
   drawSpray();
+  drawLensSpray();
   drawBoatCockpit();
 
   const vignette=
     ctx.createRadialGradient(
       W*.5,
       H*.48,
-      Math.min(W,H)*.18,
+      Math.min(
+        W,
+        H
+      )*.18,
       W*.5,
       H*.48,
-      Math.max(W,H)*.70
+      Math.max(
+        W,
+        H
+      )*.70
     );
 
   vignette.addColorStop(
-    .55,
+    .58,
     "rgba(0,0,0,0)"
   );
 
   vignette.addColorStop(
     1,
-    "rgba(0,18,30,.17)"
+    "rgba(0,16,24,.13)"
   );
 
-  ctx.fillStyle=
-    vignette;
+  ctx.fillStyle=vignette;
 
   ctx.fillRect(
     0,
@@ -2178,6 +5139,9 @@ function render(){
     W,
     H
   );
+
+  drawTargetMarkIndicator();
+  drawMiniMap();
 }
 
 function loop(now){
@@ -2187,31 +5151,17 @@ function loop(now){
       (now-last)/1000
     );
 
-  last=
-    now;
+  last=now;
+  clock+=dt;
 
-  clock+=
-    dt;
-
-  physics(
-    dt
-  );
-
-  updateCamera(
-    dt
-  );
-
+  physics(dt);
+  updateCamera(dt);
   render();
 
-  requestAnimationFrame(
-    loop
-  );
+  requestAnimationFrame(loop);
 }
 
-requestAnimationFrame(
-  loop
-);
+requestAnimationFrame(loop);
 </script>
-
 </body>
 </html>
